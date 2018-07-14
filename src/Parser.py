@@ -2,8 +2,8 @@ import numpy
 
 
 def parse_data(path):
-    input = numpy.array()
-    output = numpy.array()
+    input = numpy.array(0)
+    output = numpy.array(0)
     input_size = 0
     output_size = 0
     lines = [line.rstrip('\n') for line in open(path)]
@@ -11,14 +11,14 @@ def parse_data(path):
     for line in lines:
         if first:
             first = False
-            raw_data = line.split(',', 1)
-            input_size = raw_data[0]
-            output_size = raw_data[1]
+            raw_data = line.split(',')
+            input_size = int(raw_data[0])
+            output_size = int(raw_data[1])
         else:
-            raw_data = line.split(',', 1)
+            raw_data = line.split(' ')
             reading_input = True
             for item in raw_data:
-                if item == "-":
+                if item == "=":
                     reading_input = False
                 else:
                     if reading_input:
@@ -26,3 +26,4 @@ def parse_data(path):
                     else:
                         numpy.append(output, float(item))
     return input, output, input_size, output_size
+

@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plotter
 
 from keras.initializers import glorot_normal
-from keras.models import model_from_json
+from keras.models import model_from_json, Sequential
 from keras.layers import Input, Dense
 from keras.utils import plot_model
 
@@ -10,7 +10,7 @@ from keras.utils import plot_model
 class NeuralNetwork:
 
     def __init__(self):
-        pass
+        self.neural_network = Sequential()
 
     def create(self, input_size, output_size):
         """
@@ -18,8 +18,7 @@ class NeuralNetwork:
         uses the parameters as input and output size
         """
         # network
-        #TODO
-        self.neural_network.add(Input(shape=(input_size, 1)))
+        self.neural_network.add(Dense(input_size, input_dim=input_size))
         self.neural_network.add(Dense(units=1024, activation='relu', kernel_initializer=glorot_normal(seed=None)))
         self.neural_network.add(Dense(units=512, activation='relu', kernel_initializer=glorot_normal(seed=None)))
         self.neural_network.add(Dense(units=256, activation='relu', kernel_initializer=glorot_normal(seed=None)))

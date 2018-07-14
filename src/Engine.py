@@ -14,9 +14,9 @@ def evaluate(path_network, input):
 
 def train(path_training_set, path_target_set, path_output, epochs, batch_size):
     # keeping data
-    Support.colored_print("Loading training set...", "green")
+    Support.colored_print("Loading training and test set...", "green")
     training_input, training_output, input_size, output_size = Parser.parse_data(path_training_set)
-    test_input, test_output = Parser.parse_data(path_target_set)
+    test_input, test_output, x, y = Parser.parse_data(path_target_set)
     # building neural network
     Support.colored_print("Building neural network...", "green")
     neural_network = NeuralNetwork.NeuralNetwork()
