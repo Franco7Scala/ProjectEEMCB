@@ -15,8 +15,6 @@ python ../src/MainEvaluator.py $pathNeuralNetwork $input
 
 ################################          CLEANING            ################################
 rm ../src/Engine.pyc
-rm ../src/MainEvaluator.pyc
-rm ../src/MainTrainer.pyc
 rm ../src/NeuralNetwork.pyc
 rm ../src/Parser.pyc
 rm ../src/Support.pyc
