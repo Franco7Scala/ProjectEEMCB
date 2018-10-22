@@ -2,16 +2,17 @@
 
 ################################   CONFIGURATION PARAMETERS   ################################
 if [ "$#" -ne 2 ]; then
-    echo "using default parameters!";
-    pathNeuralNetwork="/Users/francesco/Desktop/prj/output";
-    input="1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2";
+    echo "Using default parameters!";
+    pathNeuralNetwork="/Users/francesco/Software/Python/ProjectEEMCB/data/output/test_little";
+    input="1 2 1 2 1 2 1 2 1 2 1 2";
+    inputSize=12;
 else
     pathNeuralNetwork=$0;
     input=$1;
 fi
 
 ################################         EVALUATING           ################################
-python ../src/MainEvaluator.py $pathNeuralNetwork $input
+python -W ignore ../src/MainEvaluator.py $pathNeuralNetwork "$input" $inputSize
 
 ################################          CLEANING            ################################
 rm ../src/Engine.pyc

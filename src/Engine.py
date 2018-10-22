@@ -9,13 +9,14 @@ def evaluate(path_network, input):
     neural_network.load(path_network)
     Support.colored_print("Evaluating...", "blue")
     result = neural_network.evaluate(input)
-    Support.colored_print(result, "blue")
+    Support.colored_print(result, "pink")
 
 
 def train(path_training_set, path_target_set, path_output, epochs, batch_size):
     # keeping data
-    Support.colored_print("Loading training and test set...", "green")
+    Support.colored_print("Loading training set...", "green")
     training_input, training_output, input_size, output_size = Parser.parse_data(path_training_set)
+    Support.colored_print("Loading test set...", "green")
     test_input, test_output, x, y = Parser.parse_data(path_target_set)
     # building neural network
     Support.colored_print("Building neural network...", "green")

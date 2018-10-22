@@ -13,4 +13,4 @@ def colored_print(text, color):
         code_color = '\033[95m'
     else:
         code_color = ''
-    print code_color + text + '\033[0m'
+    print code_color + str(text) + '\033[0m'

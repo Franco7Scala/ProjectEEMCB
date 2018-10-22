@@ -2,10 +2,10 @@
 
 ################################   CONFIGURATION PARAMETERS   ################################
 if [ "$#" -ne 5 ]; then
-    echo "using default parameters!";
-    pathTrainingSet="/Users/francesco/Software/Python/ProjectEEMCB/data/debugging_training_set.txt";
-    pathTestSet="/Users/francesco/Software/Python/ProjectEEMCB/data/debugging_test_set.txt";
-    pathOutput="/Users/francesco/Software/Python/ProjectEEMCB/data/output/test_debugging";
+    echo "Using default parameters!";
+    pathTrainingSet="/Users/francesco/Software/Python/ProjectEEMCB/data/little_training_set.txt";
+    pathTestSet="/Users/francesco/Software/Python/ProjectEEMCB/data/little_test_set.txt";
+    pathOutput="/Users/francesco/Software/Python/ProjectEEMCB/data/output/test_little";
     epoques=10;
     batchSize=32;
 else
@@ -17,7 +17,7 @@ else
 fi
 
 ################################          TRAINING            ################################
-python ../src/MainTrainer.py $pathTrainingSet $pathTestSet $pathOutput $epoques $batchSize
+python -W ignore ../src/MainTrainer.py $pathTrainingSet $pathTestSet $pathOutput $epoques $batchSize
 
 ################################          CLEANING            ################################
 rm ../src/Engine.pyc

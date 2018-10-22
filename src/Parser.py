@@ -1,8 +1,10 @@
 import numpy
+import Support
 
 
 def parse_data(path):
     first = True
+    second = True
     k = 0
     with open(path, "r") as inputFile:
         for line in inputFile:
@@ -14,6 +16,10 @@ def parse_data(path):
                 samples_size = int(tokens[2])
                 inputs = numpy.zeros((samples_size, input_size))
                 outputs = numpy.zeros((samples_size, output_size))
+            elif second:
+                second = False
+                Support.colored_print("Parameters: ", "blue")
+                Support.colored_print(line, "blue")
             else:
                 tokens = line.split(" ")
                 i = 0
