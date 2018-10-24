@@ -37,4 +37,3 @@ def parse_data(path):
                             j += 1
                 k += 1
     return inputs, outputs, input_size, output_size
-

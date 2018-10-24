@@ -1,9 +1,10 @@
 import os
 import matplotlib.pyplot as plotter
 
+from keras import losses
 from keras.initializers import glorot_normal
 from keras.models import model_from_json, Sequential
-from keras.layers import Input, Dense
+from keras.layers import Dense
 from keras.utils import plot_model
 
 
@@ -24,7 +25,7 @@ class NeuralNetwork:
         self.neural_network.add(Dense(units=256, activation='relu', kernel_initializer=glorot_normal(seed=None)))
         self.neural_network.add(Dense(units=128, activation='relu', kernel_initializer=glorot_normal(seed=None)))
         self.neural_network.add(Dense(units=output_size, activation='relu'))
-        self.neural_network.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+        self.neural_network.compile(optimizer='adam', loss=losses.mse, metrics=['accuracy'])
 
     def load(self, path_network):
         json_file = open(path_network + '/neural_network.json', 'r')
@@ -32,7 +33,7 @@ class NeuralNetwork:
         json_file.close()
         self.neural_network = model_from_json(loaded_model_json)
         self.neural_network.load_weights(path_network + '/neural_network.h5')
-        self.neural_network.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+        self.neural_network.compile(optimizer='adam', loss=losses.mse, metrics=['accuracy'])
 
     def save(self, path_network):
         if not os.path.exists(path_network):
