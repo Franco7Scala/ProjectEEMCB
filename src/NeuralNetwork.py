@@ -47,7 +47,7 @@ class NeuralNetwork:
     def evaluate(self, data):
         return self.neural_network.predict(data)
 
-    def train(self, training_input, training_output, test_input, test_output, epochs=100, batch_size=32, verbose=0):
+    def train(self, training_input, training_output, test_input, test_output, epochs=100, batch_size=32, verbose=0, saving_path=""):
         history = self.neural_network.fit(training_input, training_output,
                                           epochs=epochs,
                                           batch_size=batch_size,
@@ -55,19 +55,28 @@ class NeuralNetwork:
                                           verbose=1,
                                           validation_data=(test_input, test_output))
         if verbose == 1:
+            plotter.figure()
             # summarize history for accuracy
+            plotter.clf()
             plotter.plot(history.history['acc'])
             plotter.plot(history.history['val_acc'])
             plotter.title('model accuracy')
             plotter.ylabel('accuracy')
             plotter.xlabel('epoch')
             plotter.legend(['train', 'test'], loc='upper left')
-            plotter.show()
+            if saving_path != "":
+                plotter.savefig(saving_path + "/accuracy.png", dpi=400)
+            else:
+                plotter.show()
             # summarize history for loss
+            plotter.clf()
             plotter.plot(history.history['loss'])
             plotter.plot(history.history['val_loss'])
             plotter.title('model loss')
             plotter.ylabel('loss')
             plotter.xlabel('epoch')
             plotter.legend(['train', 'test'], loc='upper left')
-            plotter.show()
+            if saving_path != "":
+                plotter.savefig(saving_path + "/loss.png", dpi=400)
+            else:
+                plotter.show()
