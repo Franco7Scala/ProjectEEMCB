@@ -7,7 +7,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
-filename = "/Users/francesco/Desktop/results_svr/svm_"
+filename = "/Users/francesco/Desktop/out_svm/svm_"
 output_quantity = 6
 samples_quantity = 5
 input = numpy.asarray([[261, 0, 0, 0.0, 3030.0, 384.0, 151.0, 30407.0, -3277.0, 83.17, 29.464, 20.79],
@@ -30,4 +30,3 @@ for output_selected in range(0, output_quantity):
         Support.colored_print("Expected output: " + str(expected_outputs[sample_selected][output_selected]), "green")
         Support.colored_print("Real output: " + str(real_output), "green")
 Support.colored_print("Done!", "red")
-

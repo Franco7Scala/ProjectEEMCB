@@ -30,7 +30,9 @@ for output_selected in range(0, output_quantity):
 
     # Fit regression model
     Support.colored_print("Training...", "green")
-    svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5, param_grid={"C": [1e0, 1e1, 1e2, 1e3], "gamma": numpy.logspace(-2, 2, 5)})
+    c_param = [0.001, 0.01, 0.1, 1, 10]
+    gamma_param = [0.001, 0.01, 0.1, 1]
+    svr = GridSearchCV(SVR(kernel='rbf'), cv=5, param_grid={"C": c_param, "gamma": gamma_param})
     t0 = time.time()
     svr.fit(X[:train_size], y[:train_size])
     svr_fit = time.time() - t0
