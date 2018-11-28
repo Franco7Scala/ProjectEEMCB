@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ################################   CONFIGURATION PARAMETERS   ################################
-if [ "$#" -eq 6 ]; then
+if [ "$#" -eq 7 ]; then
     pathTrainingSet=$1;
     pathTestSet=$2;
     pathOutput=$3;

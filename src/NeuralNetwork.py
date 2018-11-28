@@ -21,9 +21,6 @@ class NeuralNetwork:
         # network
         self.neural_network.add(Dense(input_size, input_dim=input_size))
         self.neural_network.add(Dense(units=1024, activation='relu', kernel_initializer=glorot_normal(seed=None)))
-        self.neural_network.add(Dense(units=512, activation='relu', kernel_initializer=glorot_normal(seed=None)))
-        self.neural_network.add(Dense(units=256, activation='relu', kernel_initializer=glorot_normal(seed=None)))
-        self.neural_network.add(Dense(units=128, activation='relu', kernel_initializer=glorot_normal(seed=None)))
         self.neural_network.add(Dense(units=output_size, activation='relu'))
         self.neural_network.compile(optimizer=optimizers.Adam(lr=0.0001), loss=losses.mse, metrics=['accuracy'])
 
