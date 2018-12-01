@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00a069b4-b227-45d4-b807-7523b4b73a49" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/decision_tree.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/draw_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/regression_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/loaders/LoaderTrainer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/loaders/LoaderTrainer.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NeuralNetwork.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/NeuralNetwork.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/decision_tree.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/svm.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/svm.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/svm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" selection-start-line="18" selection-end-line="19" selection-end-column="45" />
+            <state relative-caret-position="356">
+              <caret line="33" column="39" lean-forward="true" selection-start-line="33" selection-start-column="39" selection-end-line="33" selection-end-column="39" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -41,12 +40,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/decision_tree.py">
+        <entry file="file://$PROJECT_DIR$/src/regression_tree.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+            <state relative-caret-position="585">
+              <caret line="39" column="15" selection-start-line="39" selection-start-column="15" selection-end-line="39" selection-end-column="15" />
               <folding>
-                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,6 +78,7 @@
     <replaceStrings>
       <replace>plotter</replace>
       <replace>numpy</replace>
+      <replace>tree</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -100,19 +100,20 @@
         <option value="$PROJECT_DIR$/src/gbm.py" />
         <option value="$PROJECT_DIR$/src/Support.py" />
         <option value="$PROJECT_DIR$/src/krr.py" />
-        <option value="$PROJECT_DIR$/src/svm.py" />
         <option value="$PROJECT_DIR$/src/test_ml.py" />
         <option value="$PROJECT_DIR$/src/NeuralNetwork.py" />
         <option value="$PROJECT_DIR$/loaders/LoaderTrainer.sh" />
         <option value="$PROJECT_DIR$/src/draw_dataset_correlation.py" />
         <option value="$PROJECT_DIR$/src/draw_data.py" />
+        <option value="$PROJECT_DIR$/src/svm.py" />
         <option value="$PROJECT_DIR$/src/decision_tree.py" />
+        <option value="$PROJECT_DIR$/src/regression_tree.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="width" value="1280" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -196,10 +197,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24960506" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -328,16 +328,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test_ml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="31" column="37" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/draw_dataset_correlation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -372,22 +362,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/svm.py">
+    <entry file="file://$PROJECT_DIR$/src/test_ml.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" selection-start-line="18" selection-end-line="19" selection-end-column="45" />
+        <state relative-caret-position="405">
+          <caret line="31" column="37" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/decision_tree.py">
+    <entry file="file://$PROJECT_DIR$/src/svm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+        <state relative-caret-position="356">
+          <caret line="33" column="39" lean-forward="true" selection-start-line="33" selection-start-column="39" selection-end-line="33" selection-end-column="39" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/regression_tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="15" selection-start-line="39" selection-start-column="15" selection-end-line="39" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
