@@ -16,6 +16,7 @@ import Parser
 import Support
 import warnings
 import sys
+import os
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -31,7 +32,7 @@ class Model(Enum):
     ADABOOST_REGRESSOR = 8              # scheduled
 
 
-selected_model = Model.SVR
+selected_model = Model.KRR
 path_training_set = "/Users/francesco/Desktop/test_set_1.txt"
 base_path_saving = "/Users/francesco/Desktop"
 
@@ -65,16 +66,16 @@ for output_selected in range(0, output_quantity):
         model_name = "FOREST"
     elif selected_model == Model.EXTRA_TREE_REGRESSOR:
         model = ExtraTreesRegressor(criterion="mse")
-        model_name = "EXTRA TREE REGRESSOR"
+        model_name = "EXTRA_TREE_REGRESSOR"
     elif selected_model == Model.GRADINET_BOOSTING_REGRESSOR:
         model = GradientBoostingRegressor(loss="lad")
-        model_name = "GRADINET BOOSTING REGRESSOR"
+        model_name = "GRADINET_BOOSTING_REGRESSOR"
     elif selected_model == Model.BAGGING_REGRESSOR:
         model = BaggingRegressor(oob_score=True)
-        model_name = "BAGGING REGRESSOR"
+        model_name = "BAGGING_REGRESSOR"
     elif selected_model == Model.ADABOOST_REGRESSOR:
         model = AdaBoostRegressor(loss="linear")
-        model_name = "ADABOOST REGRESSOR"
+        model_name = "ADABOOST_REGRESSOR"
     else:
         Support.colored_print("No method selected!", "red")
         sys.exit(0)
@@ -106,7 +107,11 @@ for output_selected in range(0, output_quantity):
     plotter.title("Learning curve for output n. " + str(output_selected) + " Training Set")
     plotter.legend(loc="best")
 
-    path_saving_svm_image = base_path_saving + "/train_forest_" + str(output_selected) + ".png"
+    path_to_save = base_path_saving + "/out_" + model_name
+    if not os.path.isdir(path_to_save):
+        os.mkdir(path_to_save)
+
+    path_saving_svm_image = path_to_save + "/train_forest_" + str(output_selected) + ".png"
     plotter.savefig(path_saving_svm_image, dpi=400)
 
     plotter.clf()
@@ -118,11 +123,11 @@ for output_selected in range(0, output_quantity):
     plotter.title("Learning curve for output n. " + str(output_selected) + " Test Set")
     plotter.legend(loc="best")
 
-    path_saving_svm_image = base_path_saving + "/test_model_" + str(output_selected) + ".png"
+    path_saving_svm_image = path_to_save + "/test_model_" + str(output_selected) + ".png"
     plotter.savefig(path_saving_svm_image, dpi=400)
 
     # saving
-    path_saving_svm_data = base_path_saving + "/model_" + str(output_selected) + ".joblib"
+    path_saving_svm_data = path_to_save + "/model_" + str(output_selected) + ".joblib"
     joblib.dump(model, path_saving_svm_data)
 
 Support.colored_print("Completed!", "pink")
