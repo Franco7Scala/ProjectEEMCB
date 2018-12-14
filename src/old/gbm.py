@@ -6,11 +6,11 @@ from sklearn.externals import joblib
 from sklearn.metrics import make_scorer
 from sklearn.ensemble import GradientBoostingClassifier
 import matplotlib.pyplot as plotter
-import scoring
+import src.scoring
 import time
 import numpy
-import Parser
-import Support
+import src.Parser
+import src.Support
 import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -22,15 +22,15 @@ base_path_saving = "/Users/francesco/Desktop"
 
 for output_selected in range(0, output_quantity):
     # Loading sample data
-    Support.colored_print("Loading training set...", "green")
-    X, y, input_size, output_size = Parser.parse_data(path_training_set)
+    src.Support.colored_print("Loading training set...", "green")
+    X, y, input_size, output_size = src.Parser.parse_data(path_training_set)
     train_size = X.size
     y = y[:, output_selected]
     X_plot = numpy.zeros((1, input_size))
     X_plot[0][0] = X.item(0)
 
     # Fit regression model
-    Support.colored_print("Training...", "green")
+    src.Support.colored_print("Training...", "green")
     model = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
 
     t0 = time.time()
@@ -44,11 +44,12 @@ for output_selected in range(0, output_quantity):
     print("GBM prediction for %d inputs in %.3f s" % (X_plot.shape[0], prediction_time))
 
     # Look at the results
-    Support.colored_print("Showing results...", "green")
+    src.Support.colored_print("Showing results...", "green")
     model = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
     train_sizes_mse, train_scores_svr_mse, test_scores_svr_mse = learning_curve(model, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring="neg_mean_squared_error", cv=10)
     train_sizes_r2, train_scores_svr_r2, test_scores_svr_r2 = learning_curve(model, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring="r2", cv=10)
-    train_sizes_re, train_scores_svr_re, test_scores_svr_re = learning_curve(model, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring=make_scorer(scoring.relative_error), cv=10)
+    train_sizes_re, train_scores_svr_re, test_scores_svr_re = learning_curve(model, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring=make_scorer(
+        src.scoring.relative_error), cv=10)
 
     plotter.figure()
     plotter.clf()
@@ -79,4 +80,4 @@ for output_selected in range(0, output_quantity):
     path_saving_svm_data = base_path_saving + "/gbm_" + str(output_selected) + ".joblib"
     joblib.dump(model, path_saving_svm_data)
 
-Support.colored_print("Completed!", "pink")
+src.Support.colored_print("Completed!", "pink")

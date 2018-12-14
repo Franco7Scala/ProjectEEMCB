@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 #path_predictors = "/Users/francesco/Desktop/out_random_forest_regressor/forest_"
 #path_test_set = "/Users/francesco/Desktop/trainingset_refixed.txt"
 
-path_predictors = "/Users/francesco/Desktop/out_random_forest_wp/forest_"
+path_predictors = "/Users/francesco/Desktop/out_svr_wp_cp/svm_"
 path_test_set = "/Users/francesco/Desktop/test_set_wp.txt"
 
 input, expected_outputs, input_size, output_size = Parser.parse_data(path_test_set)
