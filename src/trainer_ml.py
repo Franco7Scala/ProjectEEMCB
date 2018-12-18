@@ -27,12 +27,12 @@ class Model(Enum):
     REGRESSION_TREE = 3                 # done
     RANDOM_FOREST = 4                   # in progress
     EXTRA_TREE_REGRESSOR = 5            # scheduled
-    GRADINET_BOOSTING_REGRESSOR = 6     # scheduled
+    GRADIENT_BOOSTING_REGRESSOR = 6     # scheduled
     BAGGING_REGRESSOR = 7               # scheduled
     ADABOOST_REGRESSOR = 8              # scheduled
 
 
-selected_model = Model.KRR
+selected_model = Model.ADABOOST_REGRESSOR
 path_training_set = "/Users/francesco/Desktop/test_set_1.txt"
 base_path_saving = "/Users/francesco/Desktop"
 
@@ -67,9 +67,9 @@ for output_selected in range(0, output_quantity):
     elif selected_model == Model.EXTRA_TREE_REGRESSOR:
         model = ExtraTreesRegressor(criterion="mse")
         model_name = "EXTRA_TREE_REGRESSOR"
-    elif selected_model == Model.GRADINET_BOOSTING_REGRESSOR:
+    elif selected_model == Model.GRADIENT_BOOSTING_REGRESSOR:
         model = GradientBoostingRegressor(loss="lad")
-        model_name = "GRADINET_BOOSTING_REGRESSOR"
+        model_name = "GRADIENT_BOOSTING_REGRESSOR"
     elif selected_model == Model.BAGGING_REGRESSOR:
         model = BaggingRegressor(oob_score=True)
         model_name = "BAGGING_REGRESSOR"
@@ -111,7 +111,7 @@ for output_selected in range(0, output_quantity):
     if not os.path.isdir(path_to_save):
         os.mkdir(path_to_save)
 
-    path_saving_svm_image = path_to_save + "/train_forest_" + str(output_selected) + ".png"
+    path_saving_svm_image = path_to_save + "/train_model_" + str(output_selected) + ".png"
     plotter.savefig(path_saving_svm_image, dpi=400)
 
     plotter.clf()
