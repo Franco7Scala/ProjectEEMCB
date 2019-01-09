@@ -2,8 +2,7 @@ from __future__ import division
 from sklearn.svm import SVR
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor, BaggingRegressor, AdaBoostRegressor, GradientBoostingRegressor
-from sklearn.ensemble import ExtraTreesRegressor
+from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor, BaggingRegressor, AdaBoostRegressor, GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV, learning_curve
 from sklearn.externals import joblib
 from sklearn.metrics import make_scorer
@@ -33,10 +32,8 @@ class Model(Enum):
 
 
 selected_model = Model.ADABOOST_REGRESSOR
-path_training_set = "/Users/francesco/Desktop/test_set_1.txt"
+path_training_set = "/Users/francesco/Desktop/disp/rf/test_set.txt"
 base_path_saving = "/Users/francesco/Desktop"
-
-
 output_quantity = 6
 
 for output_selected in range(0, output_quantity):
@@ -68,7 +65,7 @@ for output_selected in range(0, output_quantity):
         model = ExtraTreesRegressor(criterion="mse")
         model_name = "EXTRA_TREE_REGRESSOR"
     elif selected_model == Model.GRADIENT_BOOSTING_REGRESSOR:
-        model = GradientBoostingRegressor(loss="lad")
+        model = GradientBoostingRegressor(loss="lad", n_estimators=200)
         model_name = "GRADIENT_BOOSTING_REGRESSOR"
     elif selected_model == Model.BAGGING_REGRESSOR:
         model = BaggingRegressor(oob_score=True)

@@ -23,24 +23,23 @@ model = joblib.load(path_predictors + "3.joblib")
 sum_relative_error_model = 0
 sum_relative_error_retrieved = 0
 for sample_selected in range(0, samples_quantity):
-    calculated_value = input[sample_selected][3] + \
-                       input[sample_selected][4] + \
-                       input[sample_selected][5] + \
-                       input[sample_selected][6] - \
-                       input[sample_selected][7] + \
-                       input[sample_selected][8]
+    production = input[sample_selected][3] + \
+                 input[sample_selected][4] + \
+                 input[sample_selected][5] + \
+                 input[sample_selected][6] - \
+                 input[sample_selected][8]
     for output_selected in range(0, output_quantity):
         if output_selected != 3:
-            calculated_value += expected_outputs[sample_selected][output_selected]
+            production += expected_outputs[sample_selected][output_selected]
 
     expected_output = expected_outputs[sample_selected][3]
     real_output = model.predict(input[sample_selected].reshape(1, -1))
-    retrieved_output = calculated_value
+    retrieved_output = input[sample_selected][7] - production
 
-    Support.colored_print("-------------------------------------------", "blue")
-    Support.colored_print("expected: " + str(expected_output), "green")
-    Support.colored_print("model: " + str(real_output), "green")
-    Support.colored_print("retrieved: " + str(retrieved_output), "green")
+   # Support.colored_print("-------------------------------------------", "blue")
+   # Support.colored_print("expected: " + str(expected_output), "green")
+    #Support.colored_print("model: " + str(real_output), "green")
+#    Support.colored_print("retrieved: " + str(retrieved_output), "green")
 
     relative_error_model = abs((real_output - expected_output) / real_output)
     relative_error_retrieved = abs((retrieved_output - expected_output) / retrieved_output)

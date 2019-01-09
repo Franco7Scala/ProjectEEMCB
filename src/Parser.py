@@ -2,7 +2,7 @@ import numpy
 import Support
 
 
-def parse_data(path):
+def parse_data(path, verbose = 1):
     first = True
     second = True
     k = 0
@@ -18,8 +18,9 @@ def parse_data(path):
                 outputs = numpy.zeros((samples_size, output_size))
             elif second:
                 second = False
-                Support.colored_print("Parameters: ", "blue")
-                Support.colored_print(line, "blue")
+                if verbose:
+                    Support.colored_print("Parameters: ", "blue")
+                    Support.colored_print(line, "blue")
             else:
                 tokens = line.split(" ")
                 i = 0
