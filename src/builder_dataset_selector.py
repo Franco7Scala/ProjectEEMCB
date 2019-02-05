@@ -14,14 +14,14 @@ path_output = "/Users/francesco/Desktop/output.txt"
 
 f = open(path_output, "w+")
 
-path_predictor_SVR = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/SVM.joblib"
-#path_predictor_KRR = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/KRR.joblib"
-path_predictor_RegressionTree = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/RegressionTree.joblib"
-path_predictor_RandomForest = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/RandomForest.joblib"
-path_predictor_GBRT = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/GBRT.joblib"
-path_predictor_BaggingRegressor = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/BaggingRegressor.joblib"
-path_predictor_ExtraTreeRegressor = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/ExtraTree.joblib"
-path_predictor_AdaBoostRegressor = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/AdaBoost.joblib"
+path_predictor_SVR = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/SVR.joblib"
+#path_predictor_KRR = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/KRR.joblib"
+path_predictor_RegressionTree = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/RegressionTree.joblib"
+path_predictor_RandomForest = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/RandomForest.joblib"
+path_predictor_GBRT = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/GBRT.joblib"
+path_predictor_BaggingRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/BaggingRegressor.joblib"
+path_predictor_ExtraTreeRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/ExtraTree.joblib"
+path_predictor_AdaBoostRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/AdaBoost.joblib"
 
 if training == 0:
     path_data_rf = "/Users/francesco/Desktop/Cose da Sistemare/datas/ts/test_set_rf.txt"

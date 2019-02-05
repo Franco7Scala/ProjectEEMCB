@@ -8,6 +8,7 @@ from sklearn.externals import joblib
 from sklearn.metrics import make_scorer
 from enum import Enum
 import matplotlib.pyplot as plotter
+import math
 import scoring
 import time
 import numpy
@@ -23,26 +24,25 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 class Model(Enum):
-    SVR = 1                             # done
-    KRR = 2                             # done
-    REGRESSION_TREE = 3                 # done
-    RANDOM_FOREST = 4                   # in progress
-    EXTRA_TREE_REGRESSOR = 5            # scheduled
-    GRADIENT_BOOSTING_REGRESSOR = 6     # scheduled
-    BAGGING_REGRESSOR = 7               # scheduled
-    ADABOOST_REGRESSOR = 8              # scheduled
+    REGRESSION_TREE = 1
+    RANDOM_FOREST = 2
+    EXTRA_TREE_REGRESSOR = 3
+    GRADIENT_BOOSTING_REGRESSOR = 4
+    BAGGING_REGRESSOR = 5
+    ADABOOST_REGRESSOR = 6
+    SVR = 7
 
 
-path_training_set = "/Users/francesco/Desktop/disp/rf/test_set.txt"
-path_test_set = "/Users/francesco/Desktop/disp/rf/test_set.txt"
-base_path_saving = "/Users/francesco/Desktop"
+path_training_set = "/home/francesco/Scrivania/datas/selector/training_set.txt"
+path_test_set = "/home/francesco/Scrivania/datas/selector/test_set.txt"
+base_path_saving = "/home/francesco/Scrivania"
 
 
 input_for_test, expected_outputs_for_test, input_size_for_test, output_size_for_test = Parser.parse_data(path_test_set, 0)
 output_quantity = output_size_for_test
 model_quantity = len(list(map(lambda c: c.value, Model)))
 
-for current_model in range(1, (model_quantity + 1)):
+for current_model in range(2, (model_quantity + 1)):
     selected_model = Model(current_model)
 
     for output_selected in range(0, output_quantity):
@@ -59,9 +59,6 @@ for current_model in range(1, (model_quantity + 1)):
             gamma_param = [0.001, 0.01, 0.1, 1]
             model = GridSearchCV(SVR(kernel='rbf'), cv=5, param_grid={"C": c_param, "gamma": gamma_param})
             model_name = "SVR"
-        elif selected_model == Model.KRR:
-            model = GridSearchCV(KernelRidge(kernel='rbf', gamma=0.1), cv=5, param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3], "gamma": numpy.logspace(-2, 2, 5)})
-            model_name = "KRR"
         elif selected_model == Model.REGRESSION_TREE:
             model = DecisionTreeRegressor(criterion="mse")
             model_name = "REGRESSION_TREE"
@@ -83,6 +80,7 @@ for current_model in range(1, (model_quantity + 1)):
         else:
             Support.colored_print("No method selected!", "red")
             sys.exit(0)
+        Support.colored_print("Training...", "yellow")
 
         t0 = time.time()
         model.fit(X[:train_size], y[:train_size])
@@ -91,17 +89,32 @@ for current_model in range(1, (model_quantity + 1)):
         y_model = model.predict(X_plot)
         model_predict = time.time() - t0
 
-        sum_relative_error = 0
+        sum_relative_error_real = 0
+        sum_relative_error_plus = 0
+        sum_relative_error_minus = 0
         samples_quantity, _ = input_for_test.shape
         for sample_selected in range(0, samples_quantity):
             expected_output = expected_outputs_for_test[sample_selected][output_selected]
             real_output = model.predict(input_for_test[sample_selected].reshape(1, -1))
-            if real_output != 0:
-                relative_error = abs((real_output - expected_output) / real_output)
-                sum_relative_error += relative_error
-        error = (sum_relative_error/samples_quantity)
+            plus_output = round(real_output)
+            _, minus_output = math.modf(real_output)
+            if real_output == 0:
+                real_output = 0.0001
+            if plus_output == 0:
+                plus_output = 0.0001
+            if minus_output == 0:
+                minus_output = 0.0001
+            real_relative_error = abs((real_output - expected_output) / real_output)
+            plus_relative_error = abs((plus_output - expected_output) / plus_output)
+            minus_relative_error = abs((minus_output - expected_output) / minus_output)
+            sum_relative_error_real += real_relative_error
+            sum_relative_error_plus += plus_relative_error
+            sum_relative_error_minus += minus_relative_error
+        real_error = (sum_relative_error_real/samples_quantity)
+        plus_error = (sum_relative_error_plus/samples_quantity)
+        minus_error = (sum_relative_error_minus/samples_quantity)
 
-        output_verbose = "Model: %s\nCurrent output: %i\nTraining time: %.3f s \nPrediction time: %.3f s\nPercentage quality (relative error): %.2f %%\n" % (model_name, output_selected, model_fit, model_predict, error * 100)
+        output_verbose = "Model: %s\nCurrent output: %i\nTraining time: %.3f s \nPrediction time: %.3f s\nPercentage quality real (relative error): %.2f %%\nPercentage quality plus (relative error): %.2f %%\nPercentage quality minus (relative error): %.2f %%\n" % (model_name, output_selected, model_fit, model_predict, real_error * 100, plus_error * 100, minus_error * 100)
         Support.colored_print(output_verbose, "pink")
 
         path_to_save = base_path_saving + "/out_" + model_name
@@ -111,6 +124,10 @@ for current_model in range(1, (model_quantity + 1)):
         path_saving_verbose_output = path_to_save + "/verbose_out_" + str(output_selected) + ".txt"
         with open(path_saving_verbose_output, "w") as text_file:
             text_file.write(output_verbose)
+
+        # saving
+        path_saving_svm_data = path_to_save + "/model_" + str(output_selected) + ".joblib"
+        joblib.dump(model, path_saving_svm_data)
 
         # Look at the results
         Support.colored_print("Saving results...", "green")
@@ -143,9 +160,6 @@ for current_model in range(1, (model_quantity + 1)):
         path_saving_svm_image = path_to_save + "/test_model_" + str(output_selected) + ".png"
         plotter.savefig(path_saving_svm_image, dpi=400)
 
-        # saving
-        path_saving_svm_data = path_to_save + "/model_" + str(output_selected) + ".joblib"
-        joblib.dump(model, path_saving_svm_data)
 
 Support.colored_print("Completed!", "green")
 

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00a069b4-b227-45d4-b807-7523b4b73a49" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/builder_dataset_selector.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test_ml_with_selector.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/builder_dataset_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/builder_dataset_selector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trainer_all_ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/trainer_all_ml.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,23 +15,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/builder_dataset_selector.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test_ml_with_selector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+            <state relative-caret-position="315">
+              <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/trainer_all_ml.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" selection-start-line="16" selection-end-line="16" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -99,11 +92,12 @@
         <option value="$PROJECT_DIR$/src/test_ml.py" />
         <option value="$PROJECT_DIR$/src/trainer_ml.py" />
         <option value="$PROJECT_DIR$/src/Parser.py" />
-        <option value="$PROJECT_DIR$/src/trainer_all_ml.py" />
         <option value="$PROJECT_DIR$/src/test_ml_difference_plus.py" />
         <option value="$PROJECT_DIR$/src/test_ml_best_selector.py" />
         <option value="$PROJECT_DIR$/src/test_ml_best_predictor.py" />
         <option value="$PROJECT_DIR$/src/builder_dataset_selector.py" />
+        <option value="$PROJECT_DIR$/src/trainer_all_ml.py" />
+        <option value="$PROJECT_DIR$/src/test_ml_with_selector.py" />
       </list>
     </option>
   </component>
@@ -135,6 +129,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -156,7 +151,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -197,7 +191,7 @@
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.209584" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23328067" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -423,10 +417,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test_ml_difference.py">
+    <entry file="file://$PROJECT_DIR$/src/test_ml_best_predictor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="38" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="38" />
+        <state relative-caret-position="297">
+          <caret line="24" column="21" lean-forward="true" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -443,10 +437,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test_ml_best_predictor.py">
+    <entry file="file://$PROJECT_DIR$/src/test_ml_difference.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="9" column="20" lean-forward="true" selection-end-line="111" selection-end-column="37" />
+        <state relative-caret-position="510">
+          <caret line="34" column="38" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="38" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -455,8 +449,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/builder_dataset_selector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+        <state relative-caret-position="411">
+          <caret line="69" column="10" selection-start-line="69" selection-start-column="10" selection-end-line="69" selection-end-column="10" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -465,8 +459,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/trainer_all_ml.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" selection-end-column="10" />
+        <state relative-caret-position="109">
+          <caret line="45" column="4" lean-forward="true" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test_ml_with_selector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
