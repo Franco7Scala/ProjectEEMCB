@@ -1,6 +1,8 @@
 from __future__ import division
 from sklearn.svm import SVR
 from sklearn.kernel_ridge import KernelRidge
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor, BaggingRegressor, AdaBoostRegressor, GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV, learning_curve
@@ -31,6 +33,7 @@ class Model(Enum):
     BAGGING_REGRESSOR = 5
     ADABOOST_REGRESSOR = 6
     SVR = 7
+    GPML = 8
 
 
 path_training_set = "/home/francesco/Scrivania/datas/selector/training_set.txt"
@@ -42,7 +45,7 @@ input_for_test, expected_outputs_for_test, input_size_for_test, output_size_for_
 output_quantity = output_size_for_test
 model_quantity = len(list(map(lambda c: c.value, Model)))
 
-for current_model in range(2, (model_quantity + 1)):
+for current_model in range(8, (model_quantity + 1)):
     selected_model = Model(current_model)
 
     for output_selected in range(0, output_quantity):
@@ -77,6 +80,10 @@ for current_model in range(2, (model_quantity + 1)):
         elif selected_model == Model.ADABOOST_REGRESSOR:
             model = AdaBoostRegressor(loss="linear")
             model_name = "ADABOOST_REGRESSOR"
+        elif selected_model == Model.GPML:
+            kernel = DotProduct() + WhiteKernel()
+            model = GaussianProcessRegressor(kernel=kernel, random_state=0)
+            model_name = "GPML"
         else:
             Support.colored_print("No method selected!", "red")
             sys.exit(0)

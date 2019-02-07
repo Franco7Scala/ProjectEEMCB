@@ -19,12 +19,12 @@ class Model(Enum):
     SVR = 7
 
 
-detailed_verbose = 0
+detailed_verbose = 1
 position_output = 3
 training = 0
 
 
-path_selector = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/selector_test.joblib"
+path_selector = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/selector/regression_tree.joblib"
 path_predictor_SVR = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/SVR.joblib"
 #path_predictor_KRR = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/KRR.joblib"
 path_predictor_RegressionTree = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/fossil_oil/RegressionTree.joblib"
@@ -75,8 +75,9 @@ for sample_selected in range(0, samples_quantity):
     expected_output = expected_outputs_wp[sample_selected][position_output]
 
     selector_output = model_selector.predict(input_rf[sample_selected].reshape(1, -1))
-    #TODO select type ceil!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    current_model = 4
+    current_model = round(selector_output)
+    if current_model == 0:
+        current_model = 1
     selected_output = Model(current_model)
 
     real_output = 0.0001
