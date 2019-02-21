@@ -8,6 +8,8 @@ from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor, Bagging
 from sklearn.model_selection import GridSearchCV, learning_curve
 from sklearn.externals import joblib
 from sklearn.metrics import make_scorer
+from sklearn.linear_model import ElasticNetCV, LassoCV
+from sklearn.cross_decomposition import PLSRegression
 from enum import Enum
 import matplotlib.pyplot as plotter
 import math
@@ -34,6 +36,9 @@ class Model(Enum):
     ADABOOST_REGRESSOR = 6
     SVR = 7
     GPML = 8
+    ELASTIC_NET_CV = 9
+    PLS_REGRESSION = 10
+    LASSO_CV = 11
 
 
 path_training_set = "/home/francesco/Scrivania/datas/selector/training_set.txt"
@@ -84,10 +89,22 @@ for current_model in range(8, (model_quantity + 1)):
             kernel = DotProduct() + WhiteKernel()
             model = GaussianProcessRegressor(kernel=kernel, random_state=0)
             model_name = "GPML"
+        elif selected_model == Model.ELASTIC_NET_CV:
+            model = ElasticNetCV(alphas=None, copy_X=True, cv=5, eps=0.001, fit_intercept=True,
+                                 l1_ratio=0.5, max_iter=1000, n_alphas=100, n_jobs=None,
+                                 normalize=False, positive=False, precompute='auto', random_state=0,
+                                 selection='cyclic', tol=0.0001, verbose=0)
+            model_name = "ELASTIC_NET_CV"
+        elif selected_model == Model.PLS_REGRESSION:
+            model = PLSRegression(n_components=2)
+            model_name = "PLS_REGRESSION"
+        elif selected_model == Model.LASSO_CV:
+            model = LassoCV(alpha=0.1)
+            model_name = "LASSO_CV"
         else:
             Support.colored_print("No method selected!", "red")
             sys.exit(0)
-        Support.colored_print("Training...", "yellow")
+        Support.colored_print("Training " + model_name + "...", "yellow")
 
         t0 = time.time()
         model.fit(X[:train_size], y[:train_size])
@@ -135,7 +152,7 @@ for current_model in range(8, (model_quantity + 1)):
         # saving
         path_saving_svm_data = path_to_save + "/model_" + str(output_selected) + ".joblib"
         joblib.dump(model, path_saving_svm_data)
-
+'''
         # Look at the results
         Support.colored_print("Saving results...", "green")
         # train_sizes_mse, train_scores_model_mse, test_scores_model_mse = learning_curve(forest, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring="neg_mean_squared_error", cv=10)
@@ -166,7 +183,7 @@ for current_model in range(8, (model_quantity + 1)):
 
         path_saving_svm_image = path_to_save + "/test_model_" + str(output_selected) + ".png"
         plotter.savefig(path_saving_svm_image, dpi=400)
-
+'''
 
 Support.colored_print("Completed!", "green")
 
