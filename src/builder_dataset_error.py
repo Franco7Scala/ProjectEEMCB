@@ -4,41 +4,41 @@ import Parser
 import Support
 import warnings
 
-
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+
 detailed_verbose = 0
-position_output = 3
-training = 0
-path_output_SVR = "/Users/francesco/Desktop/output_SVR.txt"
-#path_output_KRR = "/Users/francesco/Desktop/output_KRR.txt"
-path_output_RegressionTree = "/Users/francesco/Desktop/output_RegressionTree.txt"
-path_output_RandomForest = "/Users/francesco/Desktop/output_RandomForest.txt"
-path_output_GBRT = "/Users/francesco/Desktop/output_GBRT.txt"
-path_output_BaggingRegressor = "/Users/francesco/Desktop/output_BaggingRegressor.txt"
-path_output_ExtraTreeRegressor = "/Users/francesco/Desktop/output_ExtraTreeRegressor.txt"
-path_output_AdaBoostRegressor = "/Users/francesco/Desktop/output_AdaBoostRegressor.txt"
-#path_output_GPML = "/Users/francesco/Desktop/output_GPML.txt"
+training = 1
 
-file_output_error_SVR = open(path_output_SVR, "w+")
-#file_output_error_KRR = open(path_output_KRR, "w+")
-file_output_error_RegressionTree = open(path_output_RegressionTree, "w+")
-file_output_error_RandomForest = open(path_output_RandomForest, "w+")
-file_output_error_GBRT = open(path_output_GBRT, "w+")
-file_output_error_BaggingRegressor = open(path_output_BaggingRegressor, "w+")
-file_output_error_ExtraTreeRegressor = open(path_output_ExtraTreeRegressor, "w+")
-file_output_error_AdaBoostRegressor = open(path_output_AdaBoostRegressor, "w+")
-#file_output_error_GPML = open(path_output_GPML, "w+")
 
-path_predictor_SVR = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/SVR.joblib"
-#path_predictor_KRR = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/KRR.joblib"
-path_predictor_RegressionTree = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/RegressionTree.joblib"
-path_predictor_RandomForest = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/RandomForest.joblib"
-path_predictor_GBRT = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/GBRT.joblib"
-path_predictor_BaggingRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/BaggingRegressor.joblib"
-path_predictor_ExtraTreeRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/ExtraTree.joblib"
-path_predictor_AdaBoostRegressor = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/AdaBoost.joblib"
-#path_predictor_GPML = "/Users/francesco/Desktop/Cose da Sistemare/datas/best_predictors/fossil_oil/AdaBoost.joblib"
+if training == 1:
+    path_output_production_0 = "/Users/francesco/Desktop/training_set_fossil_coal_error.txt"
+    path_output_production_1 = "/Users/francesco/Desktop/training_set_fossil_gas_error.txt"
+    path_output_production_2 = "/Users/francesco/Desktop/training_set_hard_coal_error.txt"
+    path_output_production_3 = "/Users/francesco/Desktop/training_set_fossil_oil_error.txt"
+    path_output_production_4 = "/Users/francesco/Desktop/training_set_waste_error.txt"
+    path_output_production_5 = "/Users/francesco/Desktop/training_set_other_error.txt"
+else:
+    path_output_production_0 = "/Users/francesco/Desktop/test_set_fossil_coal_error.txt"
+    path_output_production_1 = "/Users/francesco/Desktop/test_set_fossil_gas_error.txt"
+    path_output_production_2 = "/Users/francesco/Desktop/test_set_hard_coal_error.txt"
+    path_output_production_3 = "/Users/francesco/Desktop/test_set_fossil_oil_error.txt"
+    path_output_production_4 = "/Users/francesco/Desktop/test_set_waste_error.txt"
+    path_output_production_5 = "/Users/francesco/Desktop/test_set_other_error.txt"
+
+file_output_production_0 = open(path_output_production_0, "w+")
+file_output_production_1 = open(path_output_production_1, "w+")
+file_output_production_2 = open(path_output_production_2, "w+")
+file_output_production_3 = open(path_output_production_3, "w+")
+file_output_production_4 = open(path_output_production_4, "w+")
+file_output_production_5 = open(path_output_production_5, "w+")
+
+path_predictor_production_0 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/fossil_coal.joblib"
+path_predictor_production_1 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/fossil_gas.joblib"
+path_predictor_production_2 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/hard_coal.joblib"
+path_predictor_production_3 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/fossil_oil.joblib"
+path_predictor_production_4 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/waste.joblib"
+path_predictor_production_5 = "/Users/francesco/Desktop/Cose da Sistemare/best_predictors/all/other.joblib"
 
 if training == 0:
     path_data_rf = "/Users/francesco/Desktop/Cose da Sistemare/datas/ts/test_set_rf.txt"
@@ -50,7 +50,6 @@ else:
     path_data_wp = "/Users/francesco/Desktop/Cose da Sistemare/datas/ds/training_set_wp.txt"
     path_data_wpwl = "/Users/francesco/Desktop/Cose da Sistemare/datas/ds/training_set_wpwl.txt"
     path_data_wpaw = "/Users/francesco/Desktop/Cose da Sistemare/datas/ds/training_set_wpaw.txt"
-
 
 input_rf, expected_outputs_rf, input_size_rf, output_size_rf = Parser.parse_data(path_data_rf, 0)
 input_wp, expected_outputs_wp, input_size_wp, output_size_wp = Parser.parse_data(path_data_wp, 0)
@@ -64,134 +63,78 @@ output_quantity_wp = len(expected_outputs_wp[0])
 output_quantity_wpwl = len(expected_outputs_wpwl[0])
 output_quantity_wpaw = len(expected_outputs_wpaw[0])
 
-model_SVR = joblib.load(path_predictor_SVR)
-#model_KRR = joblib.load(path_predictor_KRR)
-model_RegressionTree = joblib.load(path_predictor_RegressionTree)
-model_RandomForest = joblib.load(path_predictor_RandomForest)
-model_GBRT = joblib.load(path_predictor_GBRT)
-model_BaggingRegressor = joblib.load(path_predictor_BaggingRegressor)
-model_ExtraTreeRegressor = joblib.load(path_predictor_ExtraTreeRegressor)
-model_AdaBoostRegressor = joblib.load(path_predictor_AdaBoostRegressor)
-#model_GPML = joblib.load(path_predictor_GPML)
-
+model_production_0 = joblib.load(path_predictor_production_0)
+model_production_1 = joblib.load(path_predictor_production_1)
+model_production_2 = joblib.load(path_predictor_production_2)
+model_production_3 = joblib.load(path_predictor_production_3)
+model_production_4 = joblib.load(path_predictor_production_4)
+model_production_5 = joblib.load(path_predictor_production_5)
 
 # verifying
 sum_relative_error_model = 0
 for sample_selected in range(0, samples_quantity):
-    expected_output = expected_outputs_wp[sample_selected][position_output]
+    expected_output_0 = expected_outputs_wp[sample_selected][0]
+    expected_output_1 = expected_outputs_wp[sample_selected][1]
+    expected_output_2 = expected_outputs_wpwl[sample_selected][2]
+    expected_output_3 = expected_outputs_wpwl[sample_selected][3]
+    expected_output_4 = expected_outputs_wpwl[sample_selected][4]
+    expected_output_5 = expected_outputs_wpaw[sample_selected][5]
 
-    real_output_SVR = model_SVR.predict(input_rf[sample_selected].reshape(1, -1))
-    #real_output_KRR = model_KRR.predict(input_wp[sample_selected].reshape(1, -1))
-    real_output_RegressionTree = model_RegressionTree.predict(input_rf[sample_selected].reshape(1, -1))
-    real_output_RandomForest = model_RandomForest.predict(input_wpaw[sample_selected].reshape(1, -1))
-    real_output_GBRT = model_GBRT.predict(input_wpwl[sample_selected].reshape(1, -1))
-    real_output_BaggingRegressor = model_BaggingRegressor.predict(input_wpaw[sample_selected].reshape(1, -1))
-    real_output_ExtraTreeRegressor = model_ExtraTreeRegressor.predict(input_wp[sample_selected].reshape(1, -1))
-    real_output_AdaBoostRegressor = model_AdaBoostRegressor.predict(input_rf[sample_selected].reshape(1, -1))
-    #real_output_GPML = model_GPML.predict(input_rf[sample_selected].reshape(1, -1))
+    real_output_production_0 = model_production_0.predict(input_wp[sample_selected].reshape(1, -1))
+    real_output_production_1 = model_production_1.predict(input_wp[sample_selected].reshape(1, -1))
+    real_output_production_2 = model_production_2.predict(input_wpwl[sample_selected].reshape(1, -1))
+    real_output_production_3 = model_production_3.predict(input_wpwl[sample_selected].reshape(1, -1))
+    real_output_production_4 = model_production_4.predict(input_wpwl[sample_selected].reshape(1, -1))
+    real_output_production_5 = model_production_5.predict(input_wpaw[sample_selected].reshape(1, -1))
 
     if detailed_verbose != 0:
         Support.colored_print("-------------------------------------------", "blue")
-        Support.colored_print("expected: " + str(expected_output), "green")
-        Support.colored_print("model SVR: " + str(real_output_SVR), "green")
-        #Support.colored_print("model KRR: " + str(real_output_KRR), "green")
-        Support.colored_print("model RegressionTree: " + str(real_output_RegressionTree), "green")
-        Support.colored_print("model RandomForest: " + str(real_output_RandomForest), "green")
-        Support.colored_print("model GBRT: " + str(real_output_GBRT), "green")
-        Support.colored_print("model BaggingRegressor: " + str(real_output_BaggingRegressor), "green")
-        Support.colored_print("model ExtraTreeRegressor: " + str(real_output_ExtraTreeRegressor), "green")
-        Support.colored_print("model AdaBoostRegressor: " + str(real_output_AdaBoostRegressor), "green")
-        #Support.colored_print("model GPML: " + str(real_output_GPML), "green")
+        Support.colored_print("model output 0: " + str(real_output_production_0) + " expected: " + str(expected_output_0), "green")
+        Support.colored_print("model output 1: " + str(real_output_production_1) + " expected: " + str(expected_output_1), "green")
+        Support.colored_print("model output 2: " + str(real_output_production_2) + " expected: " + str(expected_output_2), "green")
+        Support.colored_print("model output 3: " + str(real_output_production_3) + " expected: " + str(expected_output_3), "green")
+        Support.colored_print("model output 4: " + str(real_output_production_4) + " expected: " + str(expected_output_4), "green")
+        Support.colored_print("model output 5: " + str(real_output_production_5) + " expected: " + str(expected_output_5), "green")
 
-
-    # relative_error_model_KRR = abs((real_output_KRR - expected_output) / real_output_KRR)
-
-    if real_output_SVR != 0:
-        relative_error_model_SVR = abs((real_output_SVR - expected_output) / real_output_SVR)
-    else:
-        relative_error_model_SVR = abs((real_output_SVR - expected_output) / (real_output_SVR + 0.0001))
-
-    if real_output_RegressionTree != 0:
-        relative_error_model_RegressionTree = abs((real_output_RegressionTree - expected_output) / real_output_RegressionTree)
-    else:
-        relative_error_model_RegressionTree = abs((real_output_RegressionTree - expected_output) / (real_output_RegressionTree + 0.0001))
-
-    if real_output_RandomForest != 0:
-        relative_error_model_RandomForest = abs((real_output_RandomForest - expected_output) / real_output_RandomForest)
-    else:
-        relative_error_model_RandomForest = abs((real_output_RandomForest - expected_output) / (real_output_RandomForest + 0.0001))
-
-    if real_output_GBRT != 0:
-        relative_error_model_GBRT = abs((real_output_GBRT - expected_output) / real_output_GBRT)
-    else:
-        relative_error_model_GBRT = abs((real_output_GBRT - expected_output) / (real_output_GBRT + 0.0001))
-
-    if real_output_BaggingRegressor != 0:
-        relative_error_model_BaggingRegressor = abs((real_output_BaggingRegressor - expected_output) / real_output_BaggingRegressor)
-    else:
-        relative_error_model_BaggingRegressor = abs((real_output_BaggingRegressor - expected_output) / (real_output_BaggingRegressor + 0.0001))
-
-    if real_output_ExtraTreeRegressor != 0:
-        relative_error_model_ExtraTreeRegressor = abs((real_output_ExtraTreeRegressor - expected_output) / real_output_ExtraTreeRegressor)
-    else:
-        relative_error_model_ExtraTreeRegressor = abs((real_output_ExtraTreeRegressor - expected_output) / (real_output_ExtraTreeRegressor + 0.0001))
-
-    if real_output_AdaBoostRegressor != 0:
-        relative_error_model_AdaBoostRegressor = abs((real_output_AdaBoostRegressor - expected_output) / real_output_AdaBoostRegressor)
-    else:
-        relative_error_model_AdaBoostRegressor = abs((real_output_AdaBoostRegressor - expected_output) / (real_output_AdaBoostRegressor + 0.0001))
-
-    #if real_output_GPML != 0:
-    #    relative_error_model_GPML = abs((real_output_GPML - expected_output) / real_output_GPML)
-    #else:
-    #    relative_error_model_GPML = abs((real_output_GPML - expected_output) / (real_output_GPML + 0.0001))
-
-
-    for current_input in range(0, len(input_rf[sample_selected])):
-        file_output_error_SVR.write("%f " % input_rf[sample_selected][current_input])
-        file_output_error_RegressionTree.write("%f " % input_rf[sample_selected][current_input])
-        file_output_error_AdaBoostRegressor.write("%f " % input_rf[sample_selected][current_input])
+    relative_error_production_0 = Support.calculate_relative_error(real_output_production_0, expected_output_0)
+    relative_error_production_1 = Support.calculate_relative_error(real_output_production_1, expected_output_1)
+    relative_error_production_2 = Support.calculate_relative_error(real_output_production_2, expected_output_2)
+    relative_error_production_3 = Support.calculate_relative_error(real_output_production_3, expected_output_3)
+    relative_error_production_4 = Support.calculate_relative_error(real_output_production_4, expected_output_4)
+    relative_error_production_5 = Support.calculate_relative_error(real_output_production_5, expected_output_5)
 
     for current_input in range(0, len(input_wp[sample_selected])):
-        file_output_error_ExtraTreeRegressor.write("%f " % input_rf[sample_selected][current_input])
+        file_output_production_0.write("%f " % input_wp[sample_selected][current_input])
+        file_output_production_1.write("%f " % input_wp[sample_selected][current_input])
 
     for current_input in range(0, len(input_wpwl[sample_selected])):
-        file_output_error_GBRT.write("%f " % input_rf[sample_selected][current_input])
+        file_output_production_2.write("%f " % input_wpwl[sample_selected][current_input])
+        file_output_production_3.write("%f " % input_wpwl[sample_selected][current_input])
+        file_output_production_4.write("%f " % input_wpwl[sample_selected][current_input])
 
     for current_input in range(0, len(input_wpaw[sample_selected])):
-        file_output_error_RandomForest.write("%f " % input_rf[sample_selected][current_input])
-        file_output_error_BaggingRegressor.write("%f " % input_rf[sample_selected][current_input])
+        file_output_production_5.write("%f " % input_wpaw[sample_selected][current_input])
 
+    file_output_production_0.write("= %lf" % (relative_error_production_0 * 100))
+    file_output_production_1.write("= %lf" % (relative_error_production_1 * 100))
+    file_output_production_2.write("= %lf" % (relative_error_production_2 * 100))
+    file_output_production_3.write("= %lf" % (relative_error_production_3 * 100))
+    file_output_production_4.write("= %lf" % (relative_error_production_4 * 100))
+    file_output_production_5.write("= %lf" % (relative_error_production_5 * 100))
 
-    file_output_error_SVR.write("= %d" % relative_error_model_SVR)
-    #file_output_error_KRR.write("= %d" % relative_error_model_KRR)
-    file_output_error_RegressionTree.write("= %d" % relative_error_model_RegressionTree)
-    file_output_error_RandomForest.write("= %d" % relative_error_model_RandomForest)
-    file_output_error_GBRT.write("= %d" % relative_error_model_GBRT)
-    file_output_error_BaggingRegressor.write("= %d" % relative_error_model_BaggingRegressor)
-    file_output_error_ExtraTreeRegressor.write("= %d" % relative_error_model_ExtraTreeRegressor)
-    file_output_error_AdaBoostRegressor.write("= %d" % relative_error_model_AdaBoostRegressor)
-    #file_output_error_GPML.write("= %d" % relative_error_model_GPML)
+    file_output_production_0.write("\n")
+    file_output_production_1.write("\n")
+    file_output_production_2.write("\n")
+    file_output_production_3.write("\n")
+    file_output_production_4.write("\n")
+    file_output_production_5.write("\n")
 
-    file_output_error_SVR.write("\n")
-    #file_output_error_KRR.write("\n")
-    file_output_error_RegressionTree.write("\n")
-    file_output_error_RandomForest.write("\n")
-    file_output_error_GBRT.write("\n")
-    file_output_error_BaggingRegressor.write("\n")
-    file_output_error_ExtraTreeRegressor.write("\n")
-    file_output_error_AdaBoostRegressor.write("\n")
-    # file_output_error_GPML.write("\n")
-
-file_output_error_SVR.close()
-#file_output_error_KRR.close()
-file_output_error_RegressionTree.close()
-file_output_error_RandomForest.close()
-file_output_error_GBRT.close()
-file_output_error_BaggingRegressor.close()
-file_output_error_ExtraTreeRegressor.close()
-file_output_error_AdaBoostRegressor.close()
-#file_output_error_GPML.close()
+file_output_production_0.close()
+file_output_production_1.close()
+file_output_production_2.close()
+file_output_production_3.close()
+file_output_production_4.close()
+file_output_production_5.close()
 
 # end
 Support.colored_print("Done!", "pink")

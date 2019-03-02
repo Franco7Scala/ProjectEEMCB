@@ -14,3 +14,10 @@ def colored_print(text, color):
     else:
         code_color = ''
     print code_color + str(text) + '\033[0m'
+
+
+def calculate_relative_error(real_output, expected_output):
+    if real_output != 0:
+        return (abs((real_output - expected_output) / real_output))
+    else:
+        return (abs((real_output - expected_output) / (real_output + 0.0001)))

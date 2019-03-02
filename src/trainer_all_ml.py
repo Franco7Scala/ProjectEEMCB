@@ -34,11 +34,11 @@ class Model(Enum):
     GRADIENT_BOOSTING_REGRESSOR = 4
     BAGGING_REGRESSOR = 5
     ADABOOST_REGRESSOR = 6
-    SVR = 7
-    GPML = 8
-    ELASTIC_NET_CV = 9
-    PLS_REGRESSION = 10
-    LASSO_CV = 11
+    ELASTIC_NET_CV = 7
+    PLS_REGRESSION = 8
+    LASSO_CV = 9
+    SVR = 10
+    GPML = 11
 
 
 path_training_set = "/home/francesco/Scrivania/datas/selector/training_set.txt"
@@ -50,7 +50,7 @@ input_for_test, expected_outputs_for_test, input_size_for_test, output_size_for_
 output_quantity = output_size_for_test
 model_quantity = len(list(map(lambda c: c.value, Model)))
 
-for current_model in range(8, (model_quantity + 1)):
+for current_model in range(1, (model_quantity + 1)):
     selected_model = Model(current_model)
 
     for output_selected in range(0, output_quantity):
@@ -152,7 +152,7 @@ for current_model in range(8, (model_quantity + 1)):
         # saving
         path_saving_svm_data = path_to_save + "/model_" + str(output_selected) + ".joblib"
         joblib.dump(model, path_saving_svm_data)
-'''
+
         # Look at the results
         Support.colored_print("Saving results...", "green")
         # train_sizes_mse, train_scores_model_mse, test_scores_model_mse = learning_curve(forest, X[:train_size], y[:train_size], train_sizes=numpy.linspace(0.1, 1, 10), scoring="neg_mean_squared_error", cv=10)
@@ -183,7 +183,7 @@ for current_model in range(8, (model_quantity + 1)):
 
         path_saving_svm_image = path_to_save + "/test_model_" + str(output_selected) + ".png"
         plotter.savefig(path_saving_svm_image, dpi=400)
-'''
+
 
 Support.colored_print("Completed!", "green")
 
