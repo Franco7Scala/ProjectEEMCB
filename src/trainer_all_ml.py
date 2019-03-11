@@ -42,7 +42,7 @@ class Model(Enum):
 
 
 path_training_set = "/home/francesco/Scrivania/datas/selector/training_set.txt"
-path_test_set = "/home/francesco/Scrivania/datas/selector/test_set.txt"
+path_test_set = "/Users/francesco/Desktop/relative_error/test_sets/test_set_error_0.txt"
 base_path_saving = "/home/francesco/Scrivania"
 
 
@@ -99,7 +99,7 @@ for current_model in range(1, (model_quantity + 1)):
             model = PLSRegression(n_components=2)
             model_name = "PLS_REGRESSION"
         elif selected_model == Model.LASSO_CV:
-            model = LassoCV(alpha=0.1)
+            model = LassoCV()
             model_name = "LASSO_CV"
         else:
             Support.colored_print("No method selected!", "red")

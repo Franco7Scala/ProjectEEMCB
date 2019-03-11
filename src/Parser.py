@@ -6,6 +6,7 @@ def parse_data(path, verbose = 1):
     first = True
     second = True
     k = 0
+    counter = 0
     with open(path, "r") as inputFile:
         for line in inputFile:
             if first:
@@ -22,19 +23,15 @@ def parse_data(path, verbose = 1):
                     Support.colored_print("Parameters: ", "blue")
                     Support.colored_print(line, "blue")
             else:
-                tokens = line.split(" ")
-                i = 0
-                j = 0
-                reading_input = True
-                for token in tokens:
-                    if token == "=":
-                        reading_input = False
-                    else:
-                        if reading_input:
-                            inputs[k][i] = float(token)
-                            i += 1
-                        else:
-                            outputs[k][j] = float(token)
-                            j += 1
-                k += 1
+                counter += 1
+                if counter < samples_size:
+                    input, output = line.split('=')
+                    for i,e in enumerate(input.split()):
+                        inputs[k][i] = float(e.strip())
+
+                    for i,e in enumerate(output.split()):
+                        outputs[k][i] = float(e.strip())
+                    k += 1
+                else:
+                    break
     return inputs, outputs, input_size, output_size
