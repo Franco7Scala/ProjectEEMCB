@@ -1,57 +1,9 @@
 import Support
 import Parser
+import knn
 import sys
 import numpy
 from sklearn.externals import joblib
-
-
-class Element:
-    def __init__(self, distance, error):
-        self.distance = distance
-        self.error = error
-
-    def __lt__(self, other):
-        return self.distance < other.distance
-
-    def __gt__(self, other):
-        return other.__lt__(self)
-
-    def __eq__(self, other):
-        return self.distance == other.distance
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __repr__(self):
-        return "error:{}, distance:{}".format(self.error, self.distance)
-
-
-def calculate_distance(sequence_a, sequence_b):
-    result = 0
-    for i in range(0, len(sequence_a)):
-        result += abs(sequence_a[i] - sequence_b[i])
-    return result
-
-def find_k_neighbors(input, samples, errors, k):
-    result = []
-    for i in range(0, len(samples)):
-        if len(result) < k:
-            result.append(Element(calculate_distance(input, samples[i]), errors[i][0]))
-        else:
-            max_distance = max(result)
-            current_distance = calculate_distance(input, samples[i])
-            if current_distance < max_distance.distance:
-                max_index = result.index(max_distance)
-                result[max_index] = Element(calculate_distance(input, samples[i]), errors[i][0])
-    return result
-
-
-def calculate_error(set):
-    sum = 0
-    size = len(set)
-    for e in set:
-        sum += e.error
-    return sum/size
 
 
 if __name__ == '__main__':
@@ -78,8 +30,8 @@ if __name__ == '__main__':
     Support.colored_print("model output: " + str(prediction), "blue")
     Support.colored_print("real output: " + str(given_output), "blue")
 
-    errors = find_k_neighbors(given_input, given_samples, given_errors, k)
-    error = calculate_error(errors)
+    errors = knn.find_k_neighbors(given_input, given_samples, given_errors, k)
+    error = knn.calculate_error(errors)
 
     Support.colored_print("distance based error: " + str(error), "red")
     Support.colored_print("real error: " + str(given_error), "red")
