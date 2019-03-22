@@ -8,21 +8,7 @@ def _calculate_distance(sequence_a, sequence_b):
     return result
 
 
-def find_k_neighbors(input, samples, errors, k):
-    result = []
-    for i in range(0, len(samples)):
-        if len(result) < k:
-            result.append(Element(_calculate_distance(input, samples[i]), errors[i][0]))
-        else:
-            max_distance = max(result)
-            current_distance = _calculate_distance(input, samples[i])
-            if current_distance < max_distance.distance:
-                max_index = result.index(max_distance)
-                result[max_index] = Element(_calculate_distance(input, samples[i]), errors[i][0])
-    return result
-
-
-def calculate_error(set):
+def _calculate_error(set):
     sum = 0
     size = len(set)
     for e in set:
@@ -30,5 +16,34 @@ def calculate_error(set):
     return sum/size
 
 
-def get_error_estimation(input, samples, errors, k):
-    return calculate_error(find_k_neighbors(input, samples, errors, k))
+def _calculate_weighted_error(set):
+    sum_px = 0
+    sum_p = 0
+    for e in set:
+        if e.distance == 0:
+            e.distance = 0.0001
+        sum_px += (e.error / e.distance)
+        sum_p += e.distance
+    return sum_px/sum_p
+
+
+def find_k_neighbors(input, samples, errors, k):   # to optimize
+    result = []
+    for i in range(0, len(samples)):
+        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0]))
+        if len(result) > k:
+            result.sort(reverse=True)
+            result = result[1:]
+    return result
+
+
+def get_error_estimation(input, samples, errors, k, weighted):
+    neighbors = find_k_neighbors(input, samples, errors, k)
+    if weighted:
+        return _calculate_weighted_error(neighbors)
+    else:
+        return _calculate_error(neighbors)
+
+
+def get_error_estimation_weighted_on_input(input, samples, errors, k, weighted):
+    pass
