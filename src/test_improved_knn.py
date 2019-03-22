@@ -1,56 +1,82 @@
 import numpy 
 import random
 import knn
+import Parser
+import Support
+import TrainElement
 
+
+def calculate_weights(train_elements):
+    # calculating weights
+    for i in range(len(set_training_big_i)):
+        # calculate weights
+        pass
+    return None
 
 if __name__ == '__main__':
     best_k = 1
     weighted = False
+    nearest_found = False
+    path_base_neighbors = ""
+    path_saving_weights = ""
+
     # loading data
-    set_training_big_i = None
-    set_training_little_i = None
-    set_test_i = None
-    set_training_big_o = None
-    set_training_little_o = None
-    set_test_o = None
+    path_training_set = ""
+    path_test_set = ""
+
+    set_training_i, set_training_o, input_size, _ = Parser.parse_data(path_training_set, 0)
+    set_test_i, set_test_o, _, _ = Parser.parse_data(path_test_set, 0)
+
+    set_training_big_i = set_training_i[1:-200]
+    set_training_little_i = set_training_i[-200:0]
+    set_training_big_o = set_training_o[1:-200]
+    set_training_little_o = set_training_o[-200:0]
 
     quantity_neighbors = 500
 
-    # training to find weights
-    for i in range(len(set_training_big_i)):
-        # finding neighbors
-        current_input = set_training_big_i[i]
-        neighbors = knn.find_k_neighbors(current_input, set_training_big_i, set_training_big_o, quantity_neighbors)
-        # saving neighbors
-        
-        # calculate weights
+    train_elements = []
+    for i in range(len(set_training_little_i)):
+        current_input = set_training_little_i[i]
+        current_output = set_training_little_o[i]
+        if not nearest_found:
+            # finding neighbors
+            neighbors_i, neighbors_o = knn.find_k_neighbors(current_input, set_training_big_i, set_training_big_o, quantity_neighbors)
+            # saving neighbors
+            path_saving_neighbors = path_base_neighbors + "/neighbors_" + str(i) + ".txt"
+            with open(path_saving_neighbors, 'a') as file:
+                for index_lines in range(len(neighbors_i)):
+                    for index_values in range(input_size):
+                        file.write(str(neighbors_i[index_lines][index_values]) + " ")
+                    file.write("= " + str(neighbors_o[index_lines][0]) + "\n")
 
-        # saving weights
+        else:
+            # loading neighbors
+            neighbors_i, neighbors_o, _, _ = Parser.parse_data(path_base_neighbors + "/neighbors_" + str(i) + ".txt", 0)
+
+        train_elements.append(TrainElement(current_input, current_output, neighbors_i, neighbors_o))
+
+    # calculating weights
+    weights = calculate_weights(train_elements)
+    # printing weights
+    Support.colored_print(weights, "blue")
+    # saving weights
+    with open(path_saving_weights, 'a') as file:
+        for index_values in range(len(weights)):
+            file.write(str(weights[index_values]) + " ")
 
     # testing on test set
+    sum_errors = 0
     for i in range(len(set_test_i)):
         # calculating error
         current_input = set_test_i[i]
         error = knn.get_error_estimation_weighted_on_input(current_input, set_training_big_i, set_training_big_o, best_k, weighted)
         # calculating statistics
+        sum_errors += abs(error - set_test_o[i][0])
 
+    avg_error = sum_errors / len(set_test_i)
     # printing results
-
-    # saving results
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    Support.colored_print("Avg accuracy (absolute error): " + str(avg_error) + "%", "pink")
+    Support.colored_print("Completed!", "pink")
 
 
 
@@ -107,85 +133,3 @@ print(theta)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import numpy
-#trovare a priori i 500 punti piu vicini per ognuno nel training set
-
-#calcolare la discesa del gradiente per diminuire l'errore di previsione dell'errore,
-#pesando i valori di inumpyut del training set, quindi va calcolato il peso per ogni
-#valore del training set al fine di diminuire l'errore.
-
-
-
-
-
-
-
-
-
-
-cur_x = 3 # The algorithm starts at x=3
-rate = 0.01 # Learning rate
-precision = 0.000001 #This tells us when to stop the algorithm
-previous_step_size = 1 #
-max_iters = 10000 # maximum number of iterations
-iters = 0 #iteration counter
-df = lambda x: 2*(x+5) #Gradient of our functi
-
-while previous_step_size > precision and iters < max_iters:
-    prev_x = cur_x  # Store current x value in prev_x
-    cur_x = cur_x - rate * df(prev_x)  # Grad descent
-    previous_step_size = abs(cur_x - prev_x)  # Change in x
-    iters = iters + 1  # iteration count
-    print("Iteration", iters, "\nX value is", cur_x)  # Print iterations
-
-print("The local minimum occurs at", cur_x)
-
-
-
-
-
-
-
-
-
-
-
-
-
-def gradient_descent(x, y, theta, alpha, iters):
-    m = len(y)
-    j_history = numpy.matrix(numpy.zeros((iters, 1)))
-    for i in range(iters):
-        prediction = x*theta.T
-        margin_error = prediction - y
-        gradient = 1/m * (alpha * (x.T * margin_error))
-        theta = theta - gradient.T
-        j_history[i] = compute_cost(x, y, theta)
-
-    return theta, j_history
-
-
-def compute_cost(x, y, theta):
-    m = len(y)
-    # We get theta transpose because we are working with a numpy array [0,0] for example
-    prediction = x * theta.T
-    j = 1/(2*m) * numpy.sum(numpy.power((prediction - y), 2))
-    return j

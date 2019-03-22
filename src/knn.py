@@ -27,7 +27,7 @@ def _calculate_weighted_error(set):
     return sum_px/sum_p
 
 
-def find_k_neighbors(input, samples, errors, k):   # to optimize
+def _find_k_neighbors(input, samples, errors, k):   # to optimize
     result = []
     for i in range(0, len(samples)):
         result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0]))
@@ -38,11 +38,15 @@ def find_k_neighbors(input, samples, errors, k):   # to optimize
 
 
 def get_error_estimation(input, samples, errors, k, weighted):
-    neighbors = find_k_neighbors(input, samples, errors, k)
+    neighbors = _find_k_neighbors(input, samples, errors, k)
     if weighted:
         return _calculate_weighted_error(neighbors)
     else:
         return _calculate_error(neighbors)
+
+
+def find_k_neighbors(input, samples, errors, k):   # to optimize
+    pass
 
 
 def get_error_estimation_weighted_on_input(input, samples, errors, k, weighted):
