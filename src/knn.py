@@ -37,6 +37,17 @@ def _find_k_neighbors(input, samples, errors, k):   # to optimize
     return result
 
 
+def _find_k_neighbors_weighted(input, weights, samples, errors, k):   # to optimize
+    result = []
+    input = input * weights
+    for i in range(0, len(samples)):
+        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0]))
+        if len(result) > k:
+            result.sort(reverse=True)
+            result = result[1:]
+    return result
+
+
 def get_error_estimation(input, samples, errors, k, weighted):
     neighbors = _find_k_neighbors(input, samples, errors, k)
     if weighted:
@@ -46,8 +57,25 @@ def get_error_estimation(input, samples, errors, k, weighted):
 
 
 def find_k_neighbors(input, samples, errors, k):   # to optimize
-    pass
+    result = []
+    for i in range(0, len(samples)):
+        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0], samples[i], errors[i]))
+        if len(result) > k:
+            result.sort(reverse=True)
+            result = result[1:]
+
+    result_i = []
+    result_o = []
+    for i in range(0, len(result)):
+        result_i[i] = result[i].input
+        result_o[i] = result[i].output
+
+    return result_i, result_o
 
 
-def get_error_estimation_weighted_on_input(input, samples, errors, k, weighted):
-    pass
+def get_error_estimation_weighted_on_input(input, weights, samples, errors, k, weighted):
+    neighbors = _find_k_neighbors_weighted(input, weights, samples, errors, k)
+    if weighted:
+        return _calculate_weighted_error(neighbors)
+    else:
+        return _calculate_error(neighbors)

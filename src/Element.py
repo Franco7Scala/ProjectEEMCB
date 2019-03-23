@@ -4,6 +4,14 @@ class Element:
     def __init__(self, distance, error):
         self.distance = distance
         self.error = error
+        self.input
+        self.output
+
+    def __init__(self, distance, error, input, output):
+        self.distance = distance
+        self.error = error
+        self.input = input
+        self.output = output
 
     def __lt__(self, other):
         return self.distance < other.distance
