@@ -67,8 +67,8 @@ def find_k_neighbors(input, samples, errors, k):   # to optimize
     result_i = []
     result_o = []
     for i in range(0, len(result)):
-        result_i[i] = result[i].input
-        result_o[i] = result[i].output
+        result_i.append(result[i].input)
+        result_o.append(result[i].output)
 
     return result_i, result_o
 
