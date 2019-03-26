@@ -38,7 +38,7 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
 
 
 def calculate_weights(train_elements, k, verbose):
-    num_iterations = 100000
+    num_iterations = 10
     alpha = 0.0005
     theta, cost = gradient_descent(train_elements, alpha, num_iterations, k, verbose)
     return theta, cost
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     verbose = True
     selected_output = 3
     path_base_neighbors = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/neighbors"
-    path_saving_weights = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights"
+    path_saving_weights = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights/weights.txt"
 
     # loading data
     path_training_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
@@ -91,7 +91,7 @@ if __name__ == '__main__':
             # loading neighbors
             neighbors_i, neighbors_o, _, _ = Parser.parse_data(path_base_neighbors + "/neighbors_" + str(i) + ".txt", 0)
 
-        train_element = TrainElement(current_input, current_output, neighbors_i, neighbors_o)
+        train_element = TrainElement(current_input, current_output[0], neighbors_i, neighbors_o)
         train_elements.append(train_element)
 
     if verbose:
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     Support.colored_print(weights, "blue")
     Support.colored_print("Cost: " + str(cost), "green")
     # saving weights
-    with open(path_saving_weights, 'a') as file:
+    with open(path_saving_weights, 'w') as file:
         for index_values in range(len(weights)):
             file.write(str(weights[index_values]) + " ")
 
@@ -114,11 +114,11 @@ if __name__ == '__main__':
     for i in range(len(set_test_i)):
         # calculating error
         current_input = set_test_i[i]
-        error = knn.get_error_estimation_weighted_on_input(current_input, set_training_big_i, set_training_big_o, best_k, weighted)
+        error = knn.get_error_estimation_weighted_on_input(current_input, weights, set_training_big_i, set_training_big_o, best_k, weighted)
         # calculating statistics
         sum_errors += abs(error - set_test_o[i][0])
 
     avg_error = sum_errors / len(set_test_i)
     # printing results
-    Support.colored_print("Avg accuracy (absolute error): " + str(avg_error) + "%", "pink")
+    Support.colored_print("Avg accuracy (absolute error): %.2lf %%" % (avg_error * 100), "pink")
     Support.colored_print("Completed!", "pink")
