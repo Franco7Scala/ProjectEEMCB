@@ -1,13 +1,7 @@
 
 
 class Element:
-    def __init__(self, distance, error):
-        self.distance = distance
-        self.error = error
-        self.input
-        self.output
-
-    def __init__(self, distance, error, input, output):
+    def __init__(self, distance, error, input = None, output = None):
         self.distance = distance
         self.error = error
         self.input = input

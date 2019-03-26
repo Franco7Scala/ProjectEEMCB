@@ -6,31 +6,35 @@ from TrainElement import TrainElement
 
 
 def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
-    sum_cost = 0
-    for j in range(len(train_elements)):
-        x = numpy.asarray(train_elements[j].input)
-        y = numpy.asarray(train_elements[j].output)
-        # m denotes the number of examples here
-        m, n = numpy.shape(x)
-        theta = numpy.ones(n)
-        x_trans = x.transpose()
-        for i in range(0, numIterations):
-            hypothesis = knn.get_error_estimation_weighted_on_input(train_elements[j].input, theta, train_elements[j].neighbors_i, train_elements[j].neighbors_o, k, False)
-            loss = hypothesis - y
-            if verbose:
-                cost = numpy.sum(loss ** 2) / (2 * m)
-                Support.colored_print("Element %d | Iteration %d | Cost: %f" % (j, i, cost), "red")
+    inputs = []
+    outputs = []
+    for e in range(0, len(train_elements)):
+        inputs.append(train_elements[e].input)
+        outputs.append(train_elements[e].output)
 
-            # avg gradient per example
-            gradient = numpy.dot(x_trans, loss) / m
-            # update
-            theta = theta - alpha * gradient
+    x = numpy.asarray(inputs)
+    y = numpy.asarray(outputs)
+    m, n = numpy.shape(x)
+    theta = numpy.ones(n)
+    x_trans = x.transpose()
+    for i in range(0, numIterations):
+        results = []
+        for j in range(len(train_elements)):
+            results.append(knn.get_error_estimation_weighted_on_input(train_elements[j].input, theta, train_elements[j].neighbors_i, train_elements[j].neighbors_o, k, False))
 
-        cost = numpy.sum(loss ** 2) / (2 * m)
-        sum_cost += cost
+        hypothesis = numpy.asarray(results)
+        loss = hypothesis - y
+        if verbose:
+            cost = numpy.sum(loss ** 2) / (2 * m)
+            Support.colored_print("Iteration %d | Cost: %f" % (i, cost), "red")
 
-    avg_cost = sum_cost/len(train_elements)
-    return theta, avg_cost
+        # avg gradient per example
+        gradient = numpy.dot(x_trans, loss) / m
+        # update
+        theta = theta - alpha * gradient
+
+    cost = numpy.sum(loss ** 2) / (2 * m)
+    return theta, cost
 
 
 def calculate_weights(train_elements, k, verbose):
@@ -45,12 +49,13 @@ if __name__ == '__main__':
     weighted = False
     nearest_found = True
     verbose = True
+    selected_output = 3
     path_base_neighbors = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/neighbors"
     path_saving_weights = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights"
 
     # loading data
-    path_training_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/ts/test_set_wp.txt"
-    path_test_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/ts/test_set_wp.txt"
+    path_training_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
+    path_test_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
 
     set_training_i, set_training_o, input_size, _ = Parser.parse_data(path_training_set, 0)
     set_test_i, set_test_o, _, _ = Parser.parse_data(path_test_set, 0)
