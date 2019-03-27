@@ -38,7 +38,7 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
 
 
 def calculate_weights(train_elements, k, verbose):
-    num_iterations = 10
+    num_iterations = 100000
     alpha = 0.0005
     theta, cost = gradient_descent(train_elements, alpha, num_iterations, k, verbose)
     return theta, cost
@@ -47,26 +47,28 @@ def calculate_weights(train_elements, k, verbose):
 if __name__ == '__main__':
     best_k = 3
     weighted = False
-    nearest_found = True
-    verbose = True
     selected_output = 3
-    path_base_neighbors = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/neighbors"
+
+    path_saving_base_neighbors = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/neighbors"
     path_saving_weights = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights/weights.txt"
 
     # loading data
     path_training_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
     path_test_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
 
+    nearest_found = False
+
     set_training_i, set_training_o, input_size, _ = Parser.parse_data(path_training_set, 0)
     set_test_i, set_test_o, _, _ = Parser.parse_data(path_test_set, 0)
 
-    set_training_big_i = set_training_i[:-20]
-    set_training_big_o = set_training_o[:-20]
+    set_training_big_i = set_training_i[:-200]
+    set_training_big_o = set_training_o[:-200]
 
-    set_training_little_i = set_training_i[-20:]
-    set_training_little_o = set_training_o[-20:]
+    set_training_little_i = set_training_i[-200:]
+    set_training_little_o = set_training_o[-200:]
 
-    quantity_neighbors = 10
+    verbose = True
+    quantity_neighbors = 500
 
     if verbose:
         Support.colored_print("Searching neighbors...", "yellow")
@@ -79,7 +81,7 @@ if __name__ == '__main__':
             # finding neighbors
             neighbors_i, neighbors_o = knn.find_k_neighbors(current_input, set_training_big_i, set_training_big_o, quantity_neighbors)
             # saving neighbors
-            path_saving_neighbors = path_base_neighbors + "/neighbors_" + str(i) + ".txt"
+            path_saving_neighbors = path_saving_base_neighbors + "/neighbors_" + str(i) + ".txt"
             with open(path_saving_neighbors, 'a') as file:
                 file.write(str(neighbors_i[0].size) + "," + str(1) + "," + str(quantity_neighbors) + "\n")
                 for index_lines in range(len(neighbors_i)):
@@ -89,7 +91,7 @@ if __name__ == '__main__':
 
         else:
             # loading neighbors
-            neighbors_i, neighbors_o, _, _ = Parser.parse_data(path_base_neighbors + "/neighbors_" + str(i) + ".txt", 0)
+            neighbors_i, neighbors_o, _, _ = Parser.parse_data(path_saving_base_neighbors + "/neighbors_" + str(i) + ".txt", 0)
 
         train_element = TrainElement(current_input, current_output[0], neighbors_i, neighbors_o)
         train_elements.append(train_element)
