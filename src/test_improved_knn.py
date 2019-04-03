@@ -38,7 +38,7 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
 
 
 def calculate_weights(train_elements, k, verbose):
-    num_iterations = 100000
+    num_iterations = 1000
     alpha = 0.0005
     theta, cost = gradient_descent(train_elements, alpha, num_iterations, k, verbose)
     return theta, cost
@@ -61,17 +61,21 @@ if __name__ == '__main__':
     set_training_i, set_training_o, input_size, _ = Parser.parse_data(path_training_set, 0)
     set_test_i, set_test_o, _, _ = Parser.parse_data(path_test_set, 0)
 
-    set_training_big_i = set_training_i[:-200]
-    set_training_big_o = set_training_o[:-200]
+    set_training_big_i = set_training_i[:-20]
+    set_training_big_o = set_training_o[:-20]
 
-    set_training_little_i = set_training_i[-200:]
-    set_training_little_o = set_training_o[-200:]
+    set_training_little_i = set_training_i[-20:]
+    set_training_little_o = set_training_o[-20:]
 
     verbose = True
-    quantity_neighbors = 500
+    quantity_neighbors = 5
 
-    if verbose:
-        Support.colored_print("Searching neighbors...", "yellow")
+    if nearest_found:
+        if verbose:
+            Support.colored_print("Loading neighbors...", "yellow")
+    else:
+        if verbose:
+            Support.colored_print("Searching neighbors...", "yellow")
 
     train_elements = []
     for i in range(len(set_training_little_i)):
@@ -114,12 +118,15 @@ if __name__ == '__main__':
     # testing on test set
     sum_errors = 0
     for i in range(len(set_test_i)):
+        percentage = (float(i) / float(len(set_test_i))) * 100
+        Support.print_progress_bar(i, len(set_test_i), prefix='Progress:', suffix='Complete', length=50)
         # calculating error
         current_input = set_test_i[i]
         error = knn.get_error_estimation_weighted_on_input(current_input, weights, set_training_big_i, set_training_big_o, best_k, weighted)
         # calculating statistics
         sum_errors += abs(error - set_test_o[i][0])
 
+    Support.colored_print("\rResults:", "yellow")
     avg_error = sum_errors / len(set_test_i)
     # printing results
     Support.colored_print("Avg accuracy (absolute error): %.2lf %%" % (avg_error * 100), "pink")
