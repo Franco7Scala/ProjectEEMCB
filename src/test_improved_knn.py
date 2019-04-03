@@ -1,11 +1,12 @@
 import numpy
 import knn
+import random
 import Parser
 import Support
 from TrainElement import TrainElement
 
 
-def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
+def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0, jump_enabled = 0):
     inputs = []
     outputs = []
     for e in range(0, len(train_elements)):
@@ -17,6 +18,8 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
     m, n = numpy.shape(x)
     theta = numpy.ones(n)
     x_trans = x.transpose()
+    counter_for_jump = 0
+    previous_cost = 0
     for i in range(0, numIterations):
         results = []
         for j in range(len(train_elements)):
@@ -24,9 +27,29 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
 
         hypothesis = numpy.asarray(results)
         loss = hypothesis - y
+        cost = numpy.sum(loss ** 2) / (2 * m)
         if verbose:
-            cost = numpy.sum(loss ** 2) / (2 * m)
             Support.colored_print("Iteration %d | Cost: %f" % (i, cost), "red")
+
+        if jump_enabled:
+            if previous_cost == cost:
+                counter_for_jump += 1
+                if counter_for_jump > 10:
+                    counter_for_jump = 0
+                    # making jump
+                    # selecting random indexes to perturbate
+                    indexes_to_perturbate = numpy.random.choice(range(len(theta)), int(float(len(theta)) * 0.4), replace=False)
+                    for j in range(len(indexes_to_perturbate)):
+                        # selecting random percentage perturbation
+                        perturbation_value = random.randint(1, 6) * 0.1
+                        perturbated = theta[indexes_to_perturbate[j]] * perturbation_value
+                        if random.randint(0, 2) == 0:
+                            perturbated *= -1
+                        theta[indexes_to_perturbate[j]] = perturbated
+                    i -= 1
+                    continue
+            else:
+                previous_cost = cost
 
         # avg gradient per example
         gradient = numpy.dot(x_trans, loss) / m
@@ -37,20 +60,22 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0):
     return theta, cost
 
 
-def calculate_weights(train_elements, k, verbose):
+def calculate_weights(train_elements, k, verbose, jump_enabled):
     num_iterations = 1000
     alpha = 0.0005
-    theta, cost = gradient_descent(train_elements, alpha, num_iterations, k, verbose)
+    theta, cost = gradient_descent(train_elements, alpha, num_iterations, k, verbose, jump_enabled)
     return theta, cost
 
 
 if __name__ == '__main__':
-    best_k = 3
+    best_k = 3  # (0-11-W) (1-7-U) (2-38-U) (3-71-U) (4-49-U) (5-10-U)
     weighted = False
     selected_output = 3
+    jump_enabled = True
 
     path_saving_base_neighbors = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/neighbors"
     path_saving_weights = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights/weights.txt"
+    path_saving_metrics = "/Users/francesco/Desktop/Cose da Sistemare/out_knn/weights/metrics.txt"
 
     # loading data
     path_training_set = "/Users/francesco/Desktop/Cose da Sistemare/datas/error/test_sets/test_set_fossil_coal_error.txt"
@@ -103,10 +128,9 @@ if __name__ == '__main__':
     if verbose:
         Support.colored_print("Calculating weights...", "yellow")
     # calculating weights
-    weights, cost = calculate_weights(train_elements, best_k, verbose)
+    weights, cost = calculate_weights(train_elements, best_k, verbose, jump_enabled)
     # printing weights
     Support.colored_print(weights, "blue")
-    Support.colored_print("Cost: " + str(cost), "green")
     # saving weights
     with open(path_saving_weights, 'w') as file:
         for index_values in range(len(weights)):
@@ -128,6 +152,10 @@ if __name__ == '__main__':
 
     Support.colored_print("\rResults:", "yellow")
     avg_error = sum_errors / len(set_test_i)
+    # saving results
+    result = "Cost: " + str(cost) + "\n" + "Avg accuracy (absolute error): %.2lf %%" % (avg_error * 100)
+    with open(path_saving_metrics, "w") as text_file:
+        text_file.write(result)
     # printing results
-    Support.colored_print("Avg accuracy (absolute error): %.2lf %%" % (avg_error * 100), "pink")
+    Support.colored_print(result, "green")
     Support.colored_print("Completed!", "pink")
