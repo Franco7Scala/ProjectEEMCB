@@ -8,6 +8,9 @@ import numpy
 def relative_error(y_true, y_pred, sample_weight=None, multioutput='uniform_average'):
     y_type, y_true, y_pred, multioutput = _check_reg_targets(y_true, y_pred, multioutput)
     check_consistent_length(y_true, y_pred, sample_weight)
+    for i in range(0, len(y_true)):
+        if y_true[i] == 0:
+            y_true[i] = 0.0001
     output_errors = numpy.average(abs((y_true - y_pred) / y_true) * 100, axis=0, weights=sample_weight)
     if isinstance(multioutput, string_types):
         if multioutput == 'raw_values':

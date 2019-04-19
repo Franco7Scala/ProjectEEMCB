@@ -36,18 +36,20 @@ def gradient_descent(train_elements, alpha, numIterations, k, verbose = 0, jump_
                 counter_for_jump += 1
                 if counter_for_jump > 10:
                     counter_for_jump = 0
-                    # making jump
-                    # selecting random indexes to perturbate
-                    indexes_to_perturbate = numpy.random.choice(range(len(theta)), int(float(len(theta)) * 0.4), replace=False)
-                    for j in range(len(indexes_to_perturbate)):
-                        # selecting random percentage perturbation
-                        perturbation_value = random.randint(1, 6) * 0.1
-                        perturbated = theta[indexes_to_perturbate[j]] * perturbation_value
-                        if random.randint(0, 2) == 0:
-                            perturbated *= -1
-                        theta[indexes_to_perturbate[j]] = perturbated
-                    i -= 1
-                    continue
+                    if cost > 10:
+                        # making jump
+                        # selecting random indexes to perturbate
+                        indexes_to_perturbate = numpy.random.choice(range(len(theta)), int(float(len(theta)) * 0.4),
+                                                                    replace=False)
+                        for j in range(len(indexes_to_perturbate)):
+                            # selecting random percentage perturbation
+                            perturbation_value = random.randint(1, 6) * 0.1
+                            perturbated = theta[indexes_to_perturbate[j]] * perturbation_value
+                            if random.randint(0, 2) == 0:
+                                perturbated *= -1
+                            theta[indexes_to_perturbate[j]] = perturbated
+                        i -= 1
+                        continue
             else:
                 previous_cost = cost
 
