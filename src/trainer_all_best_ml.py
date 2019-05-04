@@ -46,8 +46,7 @@ for current_data_set in range(0, len(training_sets)):
     path_test_set = test_sets[current_data_set]
     base_path_saving = path_out[current_data_set]
 
-    input_for_test, expected_outputs_for_test, input_size_for_test, output_size_for_test = Parser.parse_data(
-        path_test_set, 0)
+    input_for_test, expected_outputs_for_test, input_size_for_test, output_size_for_test = Parser.parse_data(path_test_set, 0)
     output_quantity = output_size_for_test
     model_quantity = len(list(map(lambda c: c.value, Model)))
 
