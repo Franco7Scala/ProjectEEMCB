@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
                     for current_k in range(1, (k_to_try + 1)):
                         Support.colored_print("Current k: " + str(current_k), "blue")
-                        sum_relative_error = 0
-                        sum_relative_error_weighted = 0
+                        sum_absolute_error = 0
+                        sum_absolute_error_weighted = 0
                         for i in range(0, len(test_set_input)):
                             current_input = test_set_input[i]
                             current_output = test_set_output[i][0]
@@ -57,12 +57,11 @@ if __name__ == '__main__':
                             if prediction_weighted == 0:
                                 prediction_weighted = 0.0001
 
-                            sum_relative_error += abs((prediction - current_output) / prediction)
-                            sum_relative_error_weighted += abs(
-                                (prediction_weighted - current_output) / prediction_weighted)
+                            sum_absolute_error += abs(prediction - current_output)
+                            sum_absolute_error_weighted += abs(prediction_weighted - current_output)
 
-                        avg_error = sum_relative_error / len(test_set_input)
-                        avg_error_weighted = sum_relative_error_weighted / len(test_set_input)
+                        avg_error = sum_absolute_error / len(test_set_input)
+                        avg_error_weighted = sum_absolute_error_weighted / len(test_set_input)
 
                         all_avg_values.append(avg_error)
                         all_avg_values_weighted.append(avg_error_weighted)
@@ -75,7 +74,7 @@ if __name__ == '__main__':
                             best_k_weighted = current_k
                             avg_accuracy_best_k_weighted = avg_error_weighted
 
-                    verbose_out = "Best k value: " + str(best_k) + " with avg accuracy (relative error): " + str(avg_accuracy_best_k * 100) + "%\nBest k weighted value: " + str(best_k_weighted) + " with avg accuracy (relative error): " + str(avg_accuracy_best_k_weighted * 100) + "%"
+                    verbose_out = "Best k value: " + str(best_k) + " with avg accuracy (absolute error): " + str(avg_accuracy_best_k * 100) + "%\nBest k weighted value: " + str(best_k_weighted) + " with avg accuracy (absolute error): " + str(avg_accuracy_best_k_weighted * 100) + "%"
                     verbose_out += "\n\n\nValues: " + str(all_avg_values)
                     verbose_out += "\n\n\nWeighted values: " + str(all_avg_values_weighted)
                     Support.colored_print(verbose_out, "pink")

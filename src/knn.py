@@ -1,4 +1,5 @@
 import Element
+import heapq
 
 
 def _calculate_distance(sequence_a, sequence_b):
@@ -27,24 +28,38 @@ def _calculate_weighted_error(set):
     return sum_px/sum_p
 
 
-def _find_k_neighbors(input, samples, errors, k):   # to optimize
+def _find_k_neighbors(input, samples, errors, k):
     result = []
+    heapq.heapify(result)
     for i in range(0, len(samples)):
-        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0]))
-        if len(result) > k:
-            result.sort(reverse=True)
-            result = result[1:]
+        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
+        if len(result) < k:
+            result.append(current_element)
+        else:
+            max = heapq.heappop(result)
+            if max < current_element:
+                heapq.heappush(result, current_element)
+            else:
+                heapq.heappush(result, max)
+
     return result
 
 
-def _find_k_neighbors_weighted(input, weights, samples, errors, k):   # to optimize
+def _find_k_neighbors_weighted(input, weights, samples, errors, k):
     result = []
     input = input * weights
+    heapq.heapify(result)
     for i in range(0, len(samples)):
-        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0]))
-        if len(result) > k:
-            result.sort(reverse=True)
-            result = result[1:]
+        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
+        if len(result) < k:
+            result.append(current_element)
+        else:
+            max = heapq.heappop(result)
+            if max < current_element:
+                heapq.heappush(result, current_element)
+            else:
+                heapq.heappush(result, max)
+
     return result
 
 
@@ -56,13 +71,19 @@ def get_error_estimation(input, samples, errors, k, weighted):
         return _calculate_error(neighbors)
 
 
-def find_k_neighbors(input, samples, errors, k):   # to optimize
+def find_k_neighbors(input, samples, errors, k):
     result = []
+    heapq.heapify(result)
     for i in range(0, len(samples)):
-        result.append(Element.Element(_calculate_distance(input, samples[i]), errors[i][0], samples[i], errors[i]))
-        if len(result) > k:
-            result.sort(reverse=True)
-            result = result[1:]
+        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0], samples[i], errors[i])
+        if len(result) < k:
+            result.append(current_element)
+        else:
+            max = heapq.heappop(result)
+            if max < current_element:
+                heapq.heappush(result, current_element)
+            else:
+                heapq.heappush(result, max)
 
     result_i = []
     result_o = []
