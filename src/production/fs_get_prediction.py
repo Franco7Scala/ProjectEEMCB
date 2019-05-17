@@ -1,17 +1,18 @@
 from sklearn.externals import joblib
+import Nation
 import sys
 import support
 import knn
 
 
-base_path_model = ""
-
-nation = sys.argv[1]
+nation_id = sys.argv[1]
 source_id = int(sys.argv[2])
 input = sys.argv[3]
 verbose = bool(sys.argv[4])
 
-path_model = base_path_model + "/" + nation + "/model_" + str(source_id) + ".joblib"
+nation = Nation()                     # TODO load info
+
+path_model = nation.path_model_base + "/" + nation_id + "/model_" + str(source_id) + ".joblib"
 
 if verbose:
     support.colored_print("Loading model...", "green")
@@ -26,7 +27,7 @@ output = model.predict(input)
 if verbose:
     support.colored_print("Estimating error...", "green")
 
-error = knn.get_error_estimation(input, training_set_error_input, training_set_error_output, current_k, False)
+error = knn.get_error_estimation(input, nation.get_training_set_error_input(), nation.get_training_set_error_output(), nation.best_k, False)
 
 if verbose:
     support.colored_print("Showing results...", "green")
