@@ -7,7 +7,7 @@ import os
 if __name__ == '__main__':
     verbose = False
     k_to_try = 50
-    root_directory = "/Users/francesco/Desktop/error_t/"
+    root_directory = "/Users/francesco/Desktop/on_error_2nd/"
 
     for dir in os.listdir(root_directory):
         if not dir[0] == '.':
@@ -15,11 +15,9 @@ if __name__ == '__main__':
             directory_nation_train = directory_nation + "/train/"
             directory_nation_test = directory_nation + "/test/"
 
-            index_output_prediction = -1
             files = os.listdir(directory_nation_train)
             files.sort()
             for file in files:
-                index_output_prediction += 1
                 if not file[0] == '.':
                     path_training_set_prediction = directory_nation_train + file
                     path_test_set_prediction = directory_nation_test + file.replace("train", "test")
@@ -84,7 +82,7 @@ if __name__ == '__main__':
                     if not os.path.isdir(path_to_save):
                         os.makedirs(path_to_save)
 
-                    path_saving_verbose_output = path_to_save + "/verbose_out_" + str(index_output_prediction) + ".txt"
+                    path_saving_verbose_output = path_to_save + "/verbose_out_" + str(path_training_set_prediction[-5]) + ".txt"
                     with open(path_saving_verbose_output, "w") as text_file:
                         text_file.write(verbose_out)
 
