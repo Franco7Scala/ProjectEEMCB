@@ -28,8 +28,8 @@ output = model.predict(input)
 if verbose:
     support.colored_print("Estimating error...", "green")
 
-training_set_error_input, training_set_error_output, input_size, output_size = parser.parse_data(nation.path_training_set_error, 0)
-error = knn.get_error_estimation(input, training_set_error_input, training_set_error_output, nation.best_k, False)
+training_set_error_input, training_set_error_output, _, _ = parser.parse_data(nation.sources[source_id].path_training_set_error, 0)
+error = knn.get_error_estimation(input, training_set_error_input, training_set_error_output, nation.sources[source_id].best_k, False)
 
 if verbose:
     support.colored_print("Showing results...", "green")
