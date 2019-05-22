@@ -3,10 +3,10 @@ import json
 
 
 class Nation:
-    def __init__(self, id, name = "", path_datas = "", path_training_set_prediction = ""):
+    def __init__(self, id, name = "", base_path_datas = "", path_training_set_prediction = ""):
         self.id = id
         self.name = name
-        self.path_datas = path_datas
+        self.base_path_datas = base_path_datas
         self.path_training_set_prediction = path_training_set_prediction
         self.sources = []
 
@@ -16,7 +16,7 @@ class Nation:
             sources += "\n" + str(source)
         return "id: " + str(self.id) + "\n" + \
                "name: " + str(self.name) + "\n" + \
-               "path_datas: " + str(self.path_datas) + "\n" + \
+               "base_path_datas: " + str(self.base_path_datas) + "\n" + \
                "path_training_set_prediction: " + str(self.path_training_set_prediction) + "\n" + \
                "\nsources: " + sources
 
@@ -50,7 +50,7 @@ def load_nation(id):
 
     result.id = int(dict["nation"]["id"])
     result.name = dict["nation"]["name"]
-    result.path_datas = dict["nation"]["path_datas"]
+    result.base_path_datas = dict["nation"]["base_path_datas"]
     result.path_training_set_prediction = dict["nation"]["path_training_set_prediction"]
     for entry in dict["nation"]["sources"]["production"]:
         production = Production(entry["id"])

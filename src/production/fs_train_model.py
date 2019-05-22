@@ -13,27 +13,30 @@ import parser
 import support
 
 
+if len(sys.argv) == 1 or sys.argv[1] == "help":
+    support.colored_print("Usage:\n\t-parameter 1: nation id (int)\n\t-parameter 2: source id (int)\n\t-parameter 3: verbose (bool)", "red")
+    sys.exit(0)
+
 nation_id = sys.argv[1]
 source_id = int(sys.argv[2])
 verbose = bool(sys.argv[3])
 
 nation = Nation.load_nation(nation_id)
 
-
-selected_model = Model(nation.sources[source_id].best_model)
-training_set_input, training_set_output, input_size, output_size = parser.parse_data(nation.path_training_set_prediction, 0)
+selected_model = Model.Model(nation.sources[source_id].best_model)
+training_set_input, training_set_output, input_size, output_size = parser.parse_data(nation.base_path_datas + nation.path_training_set_prediction)
 test_size = 200
 train_size = training_set_input.size - test_size
 training_set_output = training_set_output[:, source_id]
 
 # setup
-if selected_model == Model.EXTRA_TREE_REGRESSOR:
+if selected_model == Model.Model.EXTRA_TREE_REGRESSOR:
     model = ExtraTreesRegressor(criterion="mse")
     model_name = "EXTRA_TREE_REGRESSOR"
-elif selected_model == Model.GRADIENT_BOOSTING_REGRESSOR:
+elif selected_model == Model.Model.GRADIENT_BOOSTING_REGRESSOR:
     model = GradientBoostingRegressor(loss="lad", n_estimators=200)
     model_name = "GRADIENT_BOOSTING_REGRESSOR"
-elif selected_model == Model.GPML:
+elif selected_model == Model.Model.GPML:
     kernel = DotProduct() + WhiteKernel()
     model = GaussianProcessRegressor(kernel=kernel, random_state=0)
     model_name = "GPML"
@@ -67,15 +70,14 @@ output_verbose = "Model: %s\nCurrent output: %i\nTraining time: %.3f s \nPercent
 support.colored_print(output_verbose, "green")
 
 # saving statistics
-path_to_save = nation.path_datas
-if not os.path.isdir(path_to_save):
-    os.makedirs(path_to_save)
+if not os.path.isdir(nation.base_path_datas):
+    os.makedirs(nation.base_path_datas)
 
-with open(nation.sources[source_id].path_statistics_training, "w") as text_file:
+with open(nation.base_path_datas + nation.sources[source_id].path_statistics_training, "w") as text_file:
     text_file.write(output_verbose)
 
 # saving model
-joblib.dump(model, nation.sources[source_id].path_model)
+joblib.dump(model, nation.base_path_datas + nation.sources[source_id].path_model)
 
 # generating training set error
 test_set_input = training_set_input[-200:]
@@ -98,7 +100,7 @@ verbose_out = "Best k value: " + str(nation.sources[source_id].best_k) + " with 
 if verbose:
     support.colored_print(verbose_out, "green")
 
-with open(nation.sources[source_id].path_statistics_error, "w") as text_file:
+with open(nation.base_path_datas + nation.sources[source_id].path_statistics_error, "w") as text_file:
     text_file.write(verbose_out)
 
 support.colored_print("Completed!", "pink")
