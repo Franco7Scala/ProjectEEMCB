@@ -64,22 +64,20 @@ error = (sum_relative_error / test_size)
 
 # showing statistics
 output_verbose = "Model: %s\nCurrent output: %i\nTraining time: %.3f s \nPercentage quality real (relative error): %.2f %%\n" % (model_name, source_id, model_fit_time, error * 100)
-support.colored_print(output_verbose, "pink")
+support.colored_print(output_verbose, "green")
 
 # saving statistics
 path_to_save = nation.path_datas
 if not os.path.isdir(path_to_save):
     os.makedirs(path_to_save)
 
-path_saving_verbose_output = path_to_save + "/verbose_out_" + str(source_id) + ".txt"
-with open(path_saving_verbose_output, "w") as text_file:
+with open(nation.sources[source_id].path_statistics_training, "w") as text_file:
     text_file.write(output_verbose)
 
 # saving model
-path_saving_svm_data = path_to_save + "/model_" + str(source_id) + ".joblib"
-joblib.dump(model, path_saving_svm_data)
+joblib.dump(model, nation.sources[source_id].path_model)
 
-#generating training set error
+# generating training set error
 test_set_input, test_set_output, input_size, output_size = Parser.parse_data(nation.path_test_set_prediction, 0)
 sum_absolute_error = 0
 for i in range(0, len(test_set_input)):
@@ -87,7 +85,7 @@ for i in range(0, len(test_set_input)):
     current_output = test_set_output[i][0]
     prediction = knn.get_error_estimation(current_input, training_set_input, training_set_output, nation.sources[source_id].best_k, False)
     if verbose:
-        support.colored_print("Real output: " + str(current_output), "green")
+        support.colored_print("Real output: " + str(current_output), "blue")
 
     if prediction == 0:
         prediction = 0.0001
@@ -97,16 +95,9 @@ for i in range(0, len(test_set_input)):
 avg_error = sum_absolute_error / len(test_set_input)
 verbose_out = "Best k value: " + str(nation.sources[source_id].best_k) + " with avg accuracy (absolute error): " + str(avg_error) + "%\n"
 if verbose:
-    support.colored_print(verbose_out, "pink")
+    support.colored_print(verbose_out, "green")
 
-path_saving_verbose_output = path_to_save + "/verbose_out_" + str(source_id) + ".txt"
-with open(path_saving_verbose_output, "w") as text_file:
+with open(nation.sources[source_id].path_statistics_error, "w") as text_file:
     text_file.write(verbose_out)
 
-
-
-
-
-
-
-
+support.colored_print("Completed!", "pink")
