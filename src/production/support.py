@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-BASE_PATH_NATIONS = "/Users/francesco/Desktop"
+BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
 
 
 def colored_print(text, color):

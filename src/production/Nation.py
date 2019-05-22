@@ -3,12 +3,11 @@ import json
 
 
 class Nation:
-    def __init__(self, id, name = "", path_datas = "", path_training_set_prediction = "", path_test_set_prediction = ""):
+    def __init__(self, id, name = "", path_datas = "", path_training_set_prediction = ""):
         self.id = id
         self.name = name
         self.path_datas = path_datas
         self.path_training_set_prediction = path_training_set_prediction
-        self.path_test_set_prediction = path_test_set_prediction
         self.sources = []
 
     def __str__(self):
@@ -19,7 +18,6 @@ class Nation:
                "name: " + str(self.name) + "\n" + \
                "path_datas: " + str(self.path_datas) + "\n" + \
                "path_training_set_prediction: " + str(self.path_training_set_prediction) + "\n" + \
-               "path_test_set_prediction: " + str(self.path_test_set_prediction) + "\n" + \
                "\nsources: " + sources
 
 
@@ -42,7 +40,8 @@ class Production:
                "path_model: " + self.path_model + "\n" \
                "path_training_set_error: " + self.path_training_set_error + "\n" \
                "path_statistics_training: " + self.path_statistics_training + "\n" \
-               "path_statistics_error: " + self.path_statistics_error + "\n" \
+               "path_statistics_error: " + self.path_statistics_error + "\n"
+
 
 def load_nation(id):
     result = Nation(id)
@@ -53,12 +52,11 @@ def load_nation(id):
     result.name = dict["nation"]["name"]
     result.path_datas = dict["nation"]["path_datas"]
     result.path_training_set_prediction = dict["nation"]["path_training_set_prediction"]
-    result.path_test_set_prediction = dict["nation"]["path_test_set_prediction"]
     for entry in dict["nation"]["sources"]["production"]:
         production = Production(entry["id"])
         production.name = entry["name"]
-        production.name = int(entry["best_k"])
-        production.name = int(entry["best_model"])
+        production.best_k = int(entry["best_k"])
+        production.best_model = int(entry["best_model"])
         production.path_model = entry["path_model"]
         production.path_training_set_error = entry["path_training_set_error"]
         production.path_statistics_training = entry["path_statistics_training"]
@@ -66,7 +64,3 @@ def load_nation(id):
         result.sources.append(production)
 
     return result
-
-
-
-print load_nation(1)

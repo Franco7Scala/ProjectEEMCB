@@ -9,7 +9,7 @@ import os
 import knn
 import Nation
 import Model
-import Parser
+import parser
 import support
 
 
@@ -21,7 +21,7 @@ nation = Nation.load_nation(nation_id)
 
 
 selected_model = Model(nation.sources[source_id].best_model)
-training_set_input, training_set_output, input_size, output_size = Parser.parse_data(nation.path_training_set_prediction, 0)
+training_set_input, training_set_output, input_size, output_size = parser.parse_data(nation.path_training_set_prediction, 0)
 test_size = 200
 train_size = training_set_input.size - test_size
 training_set_output = training_set_output[:, source_id]
@@ -78,7 +78,8 @@ with open(nation.sources[source_id].path_statistics_training, "w") as text_file:
 joblib.dump(model, nation.sources[source_id].path_model)
 
 # generating training set error
-test_set_input, test_set_output, input_size, output_size = Parser.parse_data(nation.path_test_set_prediction, 0)
+test_set_input = training_set_input[-200:]
+test_set_output = training_set_output[-200:, source_id]
 sum_absolute_error = 0
 for i in range(0, len(test_set_input)):
     current_input = test_set_input[i]

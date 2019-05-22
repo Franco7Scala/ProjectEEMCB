@@ -6,6 +6,7 @@ def _calculate_distance(sequence_a, sequence_b):
     result = 0
     for i in range(0, len(sequence_a)):
         result += abs(sequence_a[i] - sequence_b[i])
+
     return result
 
 
