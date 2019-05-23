@@ -23,9 +23,7 @@ input = numpy.asanyarray([float(i) for i in sys.argv[3].split(" ")]).reshape(1, 
 verbose = bool(sys.argv[4])
 
 nation = Nation.load_nation(nation_id)
-
 path_model = nation.base_path_datas + nation.sources[source_id].path_model
-
 if verbose:
     support.colored_print("Loading model...", "green")
 
@@ -35,15 +33,13 @@ if verbose:
     support.colored_print("Making prediction...", "green")
 
 output = model.predict(input)
-
 if verbose:
     support.colored_print("Estimating error...", "green")
 
 training_set_error_input, training_set_error_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
-error = knn.get_error_estimation(input[0], training_set_error_input, training_set_error_output, nation.sources[source_id].best_k, False)
-
+error = knn.get_error_estimation(input[0], training_set_error_input, training_set_error_output, nation.sources[source_id].best_k, nation.sources[source_id].k_weighted)
 if verbose:
     support.colored_print("Showing results...", "green")
 
-support.colored_print("Prediction: %.2lf\nAbsolute error (estimated): %.2lf" % (output[0], error), "blue")
+support.colored_print("Prediction: %.2lf\nRelative error (estimated): %.2lf %%" % (output[0], error), "blue")
 support.colored_print("Completed!", "pink")

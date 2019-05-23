@@ -11,6 +11,12 @@ import Nation
 import Model
 import parser
 import support
+import warnings
+
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
@@ -24,9 +30,9 @@ verbose = bool(sys.argv[3])
 nation = Nation.load_nation(nation_id)
 
 selected_model = Model.Model(nation.sources[source_id].best_model)
-training_set_input, training_set_output, input_size, output_size = parser.parse_data(nation.base_path_datas + nation.path_training_set_prediction)
+training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.path_training_set_prediction)
 test_size = 200
-train_size = training_set_input.size - test_size
+train_size = len(training_set_input) - test_size
 training_set_output = training_set_output[:, source_id]
 
 # setup
@@ -44,7 +50,8 @@ else:
     support.colored_print("No method selected!", "red")
     sys.exit(0)
 
-support.colored_print("Training " + model_name + "...", "yellow")
+if verbose:
+    support.colored_print("Training...", "green")
 
 # training
 t0 = time.time()
@@ -66,41 +73,60 @@ for sample_selected in range(train_size, (train_size + test_size)):
 error = (sum_relative_error / test_size)
 
 # showing statistics
-output_verbose = "Model: %s\nCurrent output: %i\nTraining time: %.3f s \nPercentage quality real (relative error): %.2f %%\n" % (model_name, source_id, model_fit_time, error * 100)
-support.colored_print(output_verbose, "green")
+verbose_out_prediction = "Output n: %i\nModel: %s\nTraining time: %.3f s \nPercentage quality (relative error): %.2f %%" % (source_id, model_name, model_fit_time, error * 100)
+if verbose:
+    support.colored_print(verbose_out_prediction, "blue")
 
-# saving statistics
+if verbose:
+    support.colored_print("Saving model...", "green")
+
+# making saving directory
 if not os.path.isdir(nation.base_path_datas):
     os.makedirs(nation.base_path_datas)
-
-with open(nation.base_path_datas + nation.sources[source_id].path_statistics_training, "w") as text_file:
-    text_file.write(output_verbose)
 
 # saving model
 joblib.dump(model, nation.base_path_datas + nation.sources[source_id].path_model)
 
 # generating training set error
-test_set_input = training_set_input[-200:]
-test_set_output = training_set_output[-200:, source_id]
+if verbose:
+    support.colored_print("Generating training set error...", "green")
+
+file_training_set_error = open(nation.base_path_datas + nation.sources[source_id].path_training_set_error, "w+")
+
+for sample_selected in range(0, train_size):
+    expected_output = training_set_output[sample_selected]
+    real_output = model.predict(training_set_input[sample_selected].reshape(1, -1))
+    relative_error = support.calculate_relative_error(real_output, expected_output)
+    for current_input in range(0, len(training_set_input[sample_selected])):
+        file_training_set_error.write("%f " % training_set_input[sample_selected][current_input])
+
+    file_training_set_error.write("= %lf\n" % (relative_error * 100))
+
+file_training_set_error.close()
+
+# calculating quality error estimator
+if verbose:
+    support.colored_print("Calculating quality error estimator...", "green")
+
+set_input_error, set_output_error, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
+test_set_input_error = set_input_error[-test_size:]
+test_set_output_error = set_output_error[-test_size:]
 sum_absolute_error = 0
-for i in range(0, len(test_set_input)):
-    current_input = test_set_input[i]
-    current_output = test_set_output[i][0]
-    prediction = knn.get_error_estimation(current_input, training_set_input, training_set_output, nation.sources[source_id].best_k, False)
-    if verbose:
-        support.colored_print("Real output: " + str(current_output), "blue")
-
-    if prediction == 0:
-        prediction = 0.0001
-
+for i in range(0, len(test_set_input_error)):
+    current_input = test_set_input_error[i]
+    current_output = test_set_output_error[i]
+    prediction = knn.get_error_estimation(current_input, set_input_error[:-test_size], set_output_error[:-test_size], nation.sources[source_id].best_k, nation.sources[source_id].k_weighted)
     sum_absolute_error += abs(prediction - current_output)
 
-avg_error = sum_absolute_error / len(test_set_input)
-verbose_out = "Best k value: " + str(nation.sources[source_id].best_k) + " with avg accuracy (absolute error): " + str(avg_error) + "%\n"
+avg_error = sum_absolute_error / len(test_set_input_error)
+verbose_out_error = "Best k value for error estimation: " + str(nation.sources[source_id].best_k) + "\nAvg accuracy error estimator (absolute error): %.2f" % avg_error
 if verbose:
-    support.colored_print(verbose_out, "green")
+    support.colored_print(verbose_out_error, "blue")
 
-with open(nation.base_path_datas + nation.sources[source_id].path_statistics_error, "w") as text_file:
-    text_file.write(verbose_out)
+if verbose:
+    support.colored_print("Saving statistics...", "green")
+
+with open(nation.base_path_datas + nation.sources[source_id].path_statistics_training, "w") as text_file:
+    text_file.write(verbose_out_prediction + "\n" + verbose_out_error)
 
 support.colored_print("Completed!", "pink")

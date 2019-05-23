@@ -12,12 +12,11 @@ if len(sys.argv) == 1 or sys.argv[1] == "help":
 nation_id = sys.argv[1]
 
 nation = Nation.load_nation(nation_id)
-
 files = os.listdir(nation.base_path_datas)
 files.sort()
 for file in files:
     if "verbose_out" in file:
-        verbose_file = nation.base_path_datas + file
+        verbose_file = nation.base_path_datas + "/" + file
         with open(verbose_file, 'r') as f:
             support.colored_print(f.read(), "blue")
             support.colored_print("----------------------------------------------", "green")

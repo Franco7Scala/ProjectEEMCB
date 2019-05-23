@@ -22,25 +22,25 @@ class Nation:
 
 
 class Production:
-    def __init__(self, id, name = "", path_model = "", path_training_set_error = "", path_statistics_training = "", path_statistics_error = "", best_model = 0, best_k = 0):
+    def __init__(self, id, name = "", path_model = "", path_training_set_error = "", path_statistics_training = "", best_model = 0, best_k = 0, k_weighted = False):
         self.id = id
         self.name = name
         self.best_k = best_k
+        self.k_weighted = k_weighted
         self.best_model = best_model
         self.path_model = path_model
         self.path_training_set_error = path_training_set_error
         self.path_statistics_training = path_statistics_training
-        self.path_statistics_error = path_statistics_error
 
     def __str__(self):
         return "id: " + str(self.id) + "\n" + \
                "name: " + str(self.name) + "\n" + \
                "best_k: " + str(self.best_k) + "\n" + \
+               "k_weighted: " + str(self.k_weighted) + "\n" + \
                "best_model: " + str(self.best_model) + "\n" + \
                "path_model: " + self.path_model + "\n" \
                "path_training_set_error: " + self.path_training_set_error + "\n" \
-               "path_statistics_training: " + self.path_statistics_training + "\n" \
-               "path_statistics_error: " + self.path_statistics_error + "\n"
+               "path_statistics_training: " + self.path_statistics_training + "\n"
 
 
 def load_nation(id):
@@ -56,11 +56,11 @@ def load_nation(id):
         production = Production(entry["id"])
         production.name = entry["name"]
         production.best_k = int(entry["best_k"])
+        production.k_weighted = bool(entry["k_weighted"])
         production.best_model = int(entry["best_model"])
         production.path_model = entry["path_model"]
         production.path_training_set_error = entry["path_training_set_error"]
         production.path_statistics_training = entry["path_statistics_training"]
-        production.path_statistics_error = entry["path_statistics_error"]
         result.sources.append(production)
 
     return result
