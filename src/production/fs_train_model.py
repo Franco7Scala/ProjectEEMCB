@@ -30,7 +30,7 @@ verbose = bool(sys.argv[3])
 nation = Nation.load_nation(nation_id)
 
 selected_model = Model.Model(nation.sources[source_id].best_model)
-training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.path_training_set_prediction)
+training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_prediction)
 test_size = 200
 train_size = len(training_set_input) - test_size
 training_set_output = training_set_output[:, source_id]
