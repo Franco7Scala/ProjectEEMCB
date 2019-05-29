@@ -3,10 +3,16 @@ import json
 
 
 class Nation:
-    def __init__(self, id, name = "", base_path_datas = ""):
+    def __init__(self, id, name = "", base_path_datas = "", path_training_set_prediction_rf = "", path_training_set_prediction_wp = "", path_training_set_prediction_wpwl = "", path_training_set_prediction_wpaw = ""):
         self.id = id
         self.name = name
         self.base_path_datas = base_path_datas
+        self.path_training_set_prediction_rf = path_training_set_prediction_rf
+        self.path_training_set_prediction_wp = path_training_set_prediction_wp
+        self.path_training_set_prediction_wpwl = path_training_set_prediction_wpwl
+        self.path_training_set_prediction_wpaw = path_training_set_prediction_wpaw
+        self.indexes_inputs = []
+        self.indexes_outputs = []
         self.sources = []
 
     def __str__(self):
@@ -16,6 +22,12 @@ class Nation:
         return "id: " + str(self.id) + "\n" + \
                "name: " + str(self.name) + "\n" + \
                "base_path_datas: " + str(self.base_path_datas) + "\n" + \
+               "path_training_set_prediction_rf: " + str(self.path_training_set_prediction_rf) + "\n" + \
+               "path_training_set_prediction_wp: " + str(self.path_training_set_prediction_wp) + "\n" + \
+               "path_training_set_prediction_wpwl: " + str(self.path_training_set_prediction_wpwl) + "\n" + \
+               "path_training_set_prediction_wpaw: " + str(self.path_training_set_prediction_wpaw) + "\n" + \
+               "indexes_inputs: " + str(self.indexes_inputs) + "\n" + \
+               "indexes_outputs: " + str(self.indexes_outputs) + "\n" + \
                "\nsources: " + sources
 
 
@@ -51,6 +63,18 @@ def load_nation(id):
     result.id = int(dict["nation"]["id"])
     result.name = dict["nation"]["name"]
     result.base_path_datas = dict["nation"]["base_path_datas"]
+    result.path_training_set_prediction_rf = dict["nation"]["path_training_set_prediction_rf"]
+    result.path_training_set_prediction_wp = dict["nation"]["path_training_set_prediction_wp"]
+    result.path_training_set_prediction_wpwl = dict["nation"]["path_training_set_prediction_wpwl"]
+    result.path_training_set_prediction_wpaw = dict["nation"]["path_training_set_prediction_wpaw"]
+    result.indexes_inputs = []
+    for _, e in enumerate(dict["nation"]["indexes_inputs"].split()):
+        result.indexes_inputs.append(float(e.strip()))
+
+    result.indexes_outputs = []
+    for _, e in enumerate(dict["nation"]["indexes_outputs"].split()):
+        result.indexes_outputs.append(float(e.strip()))
+
     for entry in dict["nation"]["sources"]["production"]:
         production = Production(entry["id"])
         production.name = entry["name"]
