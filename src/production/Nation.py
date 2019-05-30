@@ -69,11 +69,11 @@ def load_nation(id):
     result.path_training_set_prediction_wpaw = dict["nation"]["path_training_set_prediction_wpaw"]
     result.indexes_inputs = []
     for _, e in enumerate(dict["nation"]["indexes_inputs"].split()):
-        result.indexes_inputs.append(float(e.strip()))
+        result.indexes_inputs.append(int(e.strip()))
 
     result.indexes_outputs = []
     for _, e in enumerate(dict["nation"]["indexes_outputs"].split()):
-        result.indexes_outputs.append(float(e.strip()))
+        result.indexes_outputs.append(int(e.strip()))
 
     for entry in dict["nation"]["sources"]["production"]:
         production = Production(entry["id"])
