@@ -12,15 +12,12 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 
-#if len(sys.argv) == 1 or sys.argv[1] == "help":
-  #  support.colored_print("Usage:\n\t-parameter 1: nation id (int)\n\t-parameter 2: verbose (bool)", "red")
-  #  sys.exit(0)
+if len(sys.argv) == 1 or sys.argv[1] == "help":
+    support.colored_print("Usage:\n\t-parameter 1: nation id (int)\n\t-parameter 2: verbose (bool)", "red")
+    sys.exit(0)
 
-#nation_id = sys.argv[1]
-#verbose = bool(sys.argv[2])
-
-nation_id = 1
-verbose = True
+nation_id = sys.argv[1]
+verbose = bool(sys.argv[2])
 
 nation = Nation.load_nation(nation_id)
 
@@ -35,16 +32,17 @@ db = MySQLdb.connect(host=dict["host"],
                      passwd=dict["password"],
                      db=dict["database"])
 
+columns_name = ["nation_id", "day_in_year", "holiday", "hour", "production_pv", "production_hydro", "production_biomass", "production_wind", "consumption", "transits", "price_oil", "price_gas", "price_gas", "price_carbon", "production_fossil_fossil_coal_gas", "production_fossil_gas", "production_fossil_hard_coal", "production_fossil_oil", "production_nuclear", "production_other", "production_waste", "production_lignite"]
 cursor = db.cursor()
-indexes_to_keep = ""
+columns_to_keep = ""
 for input_index in nation.indexes_inputs:
-    indexes_to_keep += str(int(input_index)) + ", "
+    columns_to_keep += columns_name[input_index] + ", "
 
 for output_index in nation.indexes_outputs:
-    indexes_to_keep += str(int(output_index)) + ", "
+    columns_to_keep += columns_name[output_index] + ", "
 
-indexes_to_keep = indexes_to_keep[:-2]
-cursor.execute("SELECT " + indexes_to_keep + " FROM production_data")
+columns_to_keep = columns_to_keep[:-2]
+cursor.execute("SELECT " + columns_to_keep + " FROM production_data")
 # get the number of rows in the result set
 num_rows = cursor.rowcount
 
