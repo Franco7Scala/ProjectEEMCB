@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import holidays
 
 BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
 
@@ -24,3 +25,10 @@ def calculate_relative_error(real_output, expected_output):
         return abs((real_output - expected_output) / real_output)
     else:
         return abs((real_output - expected_output) / (real_output + 0.0001))
+
+
+def is_business_day(date, nation):
+    if nation == "FR":
+        nation = "FRA"
+
+    return date not in holidays.CountryHoliday(nation)

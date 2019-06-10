@@ -5,6 +5,7 @@ CREATE TABLE nation (
 
 CREATE TABLE production_data (
 	nation_id INTEGER,
+	year INTEGER,
     day_in_year INTEGER,
     holiday BOOL,
     hour INTEGER,

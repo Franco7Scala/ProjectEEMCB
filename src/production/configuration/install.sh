@@ -7,6 +7,9 @@ sudo apt-get install python-pip
 sudo pip install numpy
 sudo pip install sklearn
 sudo pip install MySQL-python
+sudo pip install pysftp
+sudo pip install holidays
+
 
 
 
