@@ -75,7 +75,7 @@ for year in range(2016, datetime.datetime.now().year + 1):
         elaborated += 1
         if verbose:
             support.print_progress_bar(elaborated, to_elaborate, prefix='Progress:', suffix='Completed', length=50)
-        
+
         tuples = []
         # reading file containing consumption
         with open(local_folders[0] + str(year) + "_" + str(month) + "ActualTotalLoad.csv") as csv_file:
@@ -302,6 +302,5 @@ for year in range(2016, datetime.datetime.now().year + 1):
 
 if verbose:
     support.print_progress_bar(100, 100, prefix='Progress:', suffix='Completed', length=50)
+    
 support.colored_print("Completed!", "pink")
-
-
