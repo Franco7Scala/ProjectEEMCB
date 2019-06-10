@@ -1,7 +1,7 @@
 
 
 class Tuple:
-    def __init__(self, nation = None, year = None, day_in_year = None, hour = None, holiday = None, production_pv = None, production_hydro = None, production_biomass = None, production_wind = None, consumption = None, transits = None, price_oil = None, price_gas = None, price_carbon = None, production_fossil_fossil_coal_gas = None, production_fossil_gas = None, production_fossil_hard_coal = None, production_fossil_oil = None, production_nuclear = None, production_other = None, production_waste = None, production_lignite = None):
+    def __init__(self, nation = None, year = None, day_in_year = None, hour = None, holiday = None, production_pv = None, production_hydro = None, production_biomass = None, production_wind = None, consumption = None, transits = None, price_oil = None, price_gas = None, price_carbon = None, production_fossil_coal_gas = None, production_fossil_gas = None, production_fossil_hard_coal = None, production_fossil_oil = None, production_nuclear = None, production_other = None, production_waste = None, production_lignite = None):
         self.nation = nation
         self.year = year
         self.day_in_year = day_in_year
@@ -16,7 +16,7 @@ class Tuple:
         self.price_oil = price_oil
         self.price_gas = price_gas
         self.price_carbon = price_carbon
-        self.production_fossil_fossil_coal_gas = production_fossil_fossil_coal_gas
+        self.production_fossil_coal_gas = production_fossil_coal_gas
         self.production_fossil_gas = production_fossil_gas
         self.production_fossil_hard_coal = production_fossil_hard_coal
         self.production_fossil_oil = production_fossil_oil

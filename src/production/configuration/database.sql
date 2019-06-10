@@ -19,7 +19,7 @@ CREATE TABLE production_data (
     price_gas FLOAT,
     price_carbon FLOAT,
     
-    production_fossil_fossil_coal_gas FLOAT,
+    production_fossil_coal_gas FLOAT,
     production_fossil_gas FLOAT,
     production_fossil_hard_coal FLOAT,
     production_fossil_oil FLOAT,
