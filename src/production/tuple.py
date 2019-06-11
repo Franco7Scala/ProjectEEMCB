@@ -1,7 +1,7 @@
 
 
 class Tuple:
-    def __init__(self, nation = None, year = None, day_in_year = None, hour = None, holiday = None, production_pv = None, production_hydro = None, production_biomass = None, production_wind = None, consumption = None, transits = None, price_oil = None, price_gas = None, price_carbon = None, production_fossil_coal_gas = None, production_fossil_gas = None, production_fossil_hard_coal = None, production_fossil_oil = None, production_nuclear = None, production_other = None, production_waste = None, production_lignite = None):
+    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0):
         self.nation = nation
         self.year = year
         self.day_in_year = day_in_year
@@ -48,3 +48,27 @@ class Tuple:
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def __str__(self):
+        return "nation: " + str(self.nation) + "\t" + \
+               "year: " + str(self.year) + "\t" + \
+               "day_in_year: " + str(self.day_in_year) + "\t" + \
+               "hour: " + str(self.hour) + "\t" + \
+               "holiday: " + str(self.holiday) + "\t" + \
+               "production_pv: " + str(self.production_pv) + "\t" \
+               "production_hydro: " + str(self.production_hydro) + "\t" + \
+               "production_biomass: " + str(self.production_biomass) + "\t" \
+               "production_wind: " + str(self.production_wind) + "\t" \
+               "consumption: " + str(self.consumption) + "\t" + \
+               "transits: " + str(self.transits) + "\t" + \
+               "price_oil: " + str(self.price_oil) + "\t" + \
+               "price_gas: " + str(self.price_gas) + "\t" + \
+               "price_carbon: " + str(self.price_carbon) + "\t" + \
+               "production_fossil_coal_gas: " + str(self.production_fossil_coal_gas) + "\t" \
+               "production_fossil_gas: " + str(self.production_fossil_gas) + "\t" + \
+               "production_fossil_hard_coal: " + str(self.production_fossil_hard_coal) + "\t" \
+               "production_fossil_oil: " + str(self.production_fossil_oil) + "\t" \
+               "production_nuclear: " + str(self.production_nuclear) + "\t" \
+               "production_other: " + str(self.production_other) + "\t" + \
+               "production_waste: " + str(self.production_waste) + "\t" \
+               "production_lignite: " + str(self.production_lignite)

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import holidays
+import sys
+
 
 BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
 
@@ -18,6 +20,15 @@ def colored_print(text, color):
     else:
         code_color = ''
     print code_color + str(text) + '\033[0m'
+
+
+def print_progress_bar (iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + '-' * (length - filled_length)
+    sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
+    if iteration == total:
+        print()
 
 
 def calculate_relative_error(real_output, expected_output):
