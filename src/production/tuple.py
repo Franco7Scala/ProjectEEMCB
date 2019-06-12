@@ -1,12 +1,13 @@
 
 
 class Tuple:
-    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0):
+    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, date = None, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0):
         self.nation = nation
         self.year = year
         self.day_in_year = day_in_year
         self.hour = hour
         self.holiday = holiday
+        self.date = date
         self.production_pv = production_pv
         self.production_hydro = production_hydro
         self.production_biomass = production_biomass
@@ -55,6 +56,7 @@ class Tuple:
                "day_in_year: " + str(self.day_in_year) + "\t" + \
                "hour: " + str(self.hour) + "\t" + \
                "holiday: " + str(self.holiday) + "\t" + \
+               "date: " + str(self.date) + "\t" + \
                "production_pv: " + str(self.production_pv) + "\t" \
                "production_hydro: " + str(self.production_hydro) + "\t" + \
                "production_biomass: " + str(self.production_biomass) + "\t" \

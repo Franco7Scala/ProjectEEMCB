@@ -4,12 +4,13 @@ import sys
 import os
 import warnings
 import csv
-import datetime
 import support
 import json
 import bisect
 import MySQLdb
 import codecs
+from datetime import datetime, timedelta
+
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -80,10 +81,10 @@ local_folders.append(local_saving_folder + "/carbon.csv")
 if verbose:
     support.colored_print("Aggregating datas...", "green")
 
-to_elaborate = ((datetime.datetime.now().year - 2016) * 12) + datetime.datetime.now().month
+to_elaborate = ((datetime.now().year - 2016) * 12) + datetime.now().month
 elaborated = -1
-for year in range(2016, datetime.datetime.now().year + 1):
-    for month in range(1, datetime.datetime.now().month):
+for year in range(2016, datetime.now().year + 1):
+    for month in range(1, datetime.now().month):
         elaborated += 1
         if verbose:
             support.print_progress_bar(elaborated, to_elaborate, prefix='Progress:', suffix='Completed', length=50)
@@ -104,7 +105,7 @@ for year in range(2016, datetime.datetime.now().year + 1):
                     if not (int(row[0]) == year and int(row[1]) == month):
                         continue
 
-                    if not row[8] in dict["nations"]:
+                    if not support.double_contains(row[8], dict["nations"]):
                         continue
 
                     current_date = datetime.datetime(int(row[0]), int(row[1]), int(row[2]))
@@ -129,7 +130,7 @@ for year in range(2016, datetime.datetime.now().year + 1):
                         bisect.insort(tuples, current_tuple)
 
         # reading file containing production
-        with open(local_folders[1] + str(year) + "_" + str(month) + "_ActualGenerationOutputPerUnit.csv", "rU") as csv_file:
+        with codecs.open(local_folders[1] + str(year) + "_" + str(month) + "_ActualGenerationOutputPerUnit.csv", "rU") as csv_file:
             csv_reader = csv.reader((x.replace('\0', '') for x in csv_file), delimiter='\t')
             first = True
             for row in csv_reader:
@@ -137,23 +138,23 @@ for year in range(2016, datetime.datetime.now().year + 1):
                     first = False
 
                 else:
-                    print row
-                    if len(row) == 0:
+                    if len(row) < 8:
+                        continue
+
+                    if not support.double_contains(row[8], dict["nations"]):
                         continue
 
                     if not (int(row[0]) == year and int(row[1]) == month):
                         continue
 
-                    if not row[8] in dict["nations"]:
-                        continue
-
-                    current_date = datetime.datetime(int(row[0]), int(row[1]), int(row[2]))
+                    current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
                     current_tuple = tuple.Tuple()
                     current_tuple.nation = row[8]
                     current_tuple.year = year
                     current_tuple.day_in_year = current_date.timetuple().tm_yday
                     current_tuple.hour = int(str(row[3])[11:13])
                     current_tuple.holiday = support.is_business_day(current_date, current_tuple.nation)
+                    current_tuple.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -164,39 +165,43 @@ for year in range(2016, datetime.datetime.now().year + 1):
 
                     # adding generation type value
                     production_type = str(row[11])
+                    consumption_source = 0
+                    if str(row[13]) != "":
+                        consumption_source = float(row[13])
+
                     if row[12] != "":
                         if "Fossil Gas" in production_type:
-                            current_tuple.production_fossil_gas += float(row[12])
+                            current_tuple.production_fossil_gas += float(row[12]) - consumption_source
 
                         elif "Hydro" in production_type:
-                            current_tuple.production_hydro += float(row[12])
+                            current_tuple.production_hydro += float(row[12]) - consumption_source
 
                         elif "Nuclear" in production_type:
-                            current_tuple.production_nuclear += float(row[12])
+                            current_tuple.production_nuclear += float(row[12]) - consumption_source
 
                         elif "Fossil Oil" in production_type:
-                            current_tuple.production_fossil_oil += float(row[12])
+                            current_tuple.production_fossil_oil += float(row[12]) - consumption_source
 
                         elif "Fossil Hard coal" in production_type:
-                            current_tuple.production_fossil_hard_coal += float(row[12])
+                            current_tuple.production_fossil_hard_coal += float(row[12]) - consumption_source
 
                         elif "Fossil Brown coal/Lignite" in production_type:
-                            current_tuple.production_lignite += float(row[12])
+                            current_tuple.production_lignite += float(row[12]) - consumption_source
 
                         elif "Other" in production_type:
-                            current_tuple.production_other += float(row[12])
+                            current_tuple.production_other += float(row[12]) - consumption_source
 
                         elif "Biomass" in production_type:
-                            current_tuple.production_biomass += float(row[12])
+                            current_tuple.production_biomass += float(row[12]) - consumption_source
 
                         elif "Wind" in production_type:
-                            current_tuple.production_wind += float(row[12])
+                            current_tuple.production_wind += float(row[12]) - consumption_source
 
                         elif "Fossil Coal-derived gas" in production_type:
-                            current_tuple.production_fossil_coal_gas += float(row[12])
+                            current_tuple.production_fossil_coal_gas += float(row[12]) - consumption_source
 
                         elif "Waste" in production_type:
-                            current_tuple.production_waste += float(row[12])
+                            current_tuple.production_waste += float(row[12]) - consumption_source
 
                     # saving into list
                     if not found:
@@ -217,10 +222,10 @@ for year in range(2016, datetime.datetime.now().year + 1):
                     if not (int(row[0]) == year and int(row[1]) == month):
                         continue
 
-                    if not row[8] in dict["nations"]:
+                    if not (support.double_contains(row[11], dict["nations"]) or support.double_contains(row[15], dict["nations"])):
                         continue
 
-                    current_date = datetime.datetime(int(row[0]), int(row[1]), int(row[2]))
+                    current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
                     # tuple in
                     current_tuple_in = tuple.Tuple()
                     current_tuple_in.nation = row[11]
@@ -228,6 +233,7 @@ for year in range(2016, datetime.datetime.now().year + 1):
                     current_tuple_in.day_in_year = current_date.timetuple().tm_yday
                     current_tuple_in.hour = int(str(row[3])[11:13])
                     current_tuple_in.holiday = support.is_business_day(current_date, current_tuple_in.nation)
+                    current_tuple.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -242,7 +248,8 @@ for year in range(2016, datetime.datetime.now().year + 1):
                     current_tuple_out.year = year
                     current_tuple_out.day_out_year = current_date.timetuple().tm_yday
                     current_tuple_out.hour = int(str(row[3])[11:13])
-                    current_tuple_out.holiday = support.is_busoutess_day(current_date, current_tuple_out.nation)
+                    current_tuple_out.holiday = support.is_business_day(current_date, current_tuple_out.nation)
+                    current_tuple.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -251,10 +258,10 @@ for year in range(2016, datetime.datetime.now().year + 1):
                             found = True
                             break
 
-                    if current_tuple_in.nation in dict["nations"]:
+                    if support.double_contains(current_tuple_in.nation, dict["nations"]):
                         current_tuple_in.transits += float(row[16])
 
-                    if current_tuple_out.nation in dict["nations"]:
+                    if support.double_contains(current_tuple_out.nation, dict["nations"]):
                         current_tuple_out.transits -= float(row[16])
 
                     # saving into list
@@ -262,18 +269,24 @@ for year in range(2016, datetime.datetime.now().year + 1):
                         bisect.insort(tuples, current_tuple)
 
         # reading file containing price oil and natural gas
+        oil_prices = {}
+        gas_prices = {}
         for index in range(3, 5):
             with open(local_folders[index], "r") as input_file:
                 with open(local_folders[index] + ".tmp", "w") as output_file:
                     found = False
-                    for line in input_file:
-                        if line.strip("\n") == "date, value":
+                    line = input_file.readline()
+                    while line:
+                        if "date, value" in line:
                             found = True
 
                         if found:
                             output_file.write(line)
 
+                        line = input_file.readline()
+
             os.rename(local_folders[index] + ".tmp", local_folders[index])
+
             with open(local_folders[index]) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 first = True
@@ -283,17 +296,16 @@ for year in range(2016, datetime.datetime.now().year + 1):
 
                     else:
                         raw_date = str(row[0]).split('-')
-                        current_date = datetime.datetime(raw_date[0], raw_date[1], raw_date[2])
+                        current_date = datetime(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
                         price = float(row[1])
-                        for value in tuples:
-                            if value.year == current_date.year and value.day_in_year == current_date.timetuple().tm_yday:
-                                if index == 3:
-                                    value.price_oil = price
+                        if index == 3:
+                            oil_prices[current_date] = price
 
-                                else:
-                                    value.price_gas = price
+                        else:
+                            gas_prices[current_date] = price
 
         # reading file containing price carbon
+        carbon_prices = {}
         with open(local_folders[5]) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             first = True
@@ -303,18 +315,47 @@ for year in range(2016, datetime.datetime.now().year + 1):
 
                 else:
                     raw_date = str(str(row[0]).split(' ')[0]).split('-')
-                    current_date = datetime.datetime(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
+                    current_date = datetime(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
                     if len(row) > 2:
                         price = float(row[1] + "." + row[2])
                     else:
                         price = float(row[1])
 
-                    for value in tuples:
-                        if value.year == current_date.year and value.day_in_year == current_date.timetuple().tm_yday:
-                            value.price_carbon = price
+                    carbon_prices[current_date] = price
 
+        # applying prices to tuples
+        for value in tuples:
+            putted = False
+            target_date = value.date
+            while not putted:
+                price = oil_prices.get(target_date)
+                if price is not None:
+                    value.price_oil = price
+                    putted = True
+                else:
+                    #print target_date
+                    target_date = target_date - timedelta(days=1)
 
-        print len(tuples)
+            putted = False
+            target_date = value.date
+            while not putted:
+                price = gas_prices.get(target_date)
+                if price is not None:
+                    value.price_gas = price
+                    putted = True
+                else:
+                    target_date = target_date - timedelta(days=1)
+
+            putted = False
+            target_date = value.date
+            while not putted:
+                price = carbon_prices.get(target_date)
+                if price is not None:
+                    value.price_carbon = price
+                    putted = True
+                else:
+                    target_date = target_date - timedelta(days=1)
+
         for value in tuples:
             print value
 

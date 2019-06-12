@@ -42,4 +42,12 @@ def is_business_day(date, nation):
     if nation == "FR":
         nation = "FRA"
 
-    return date not in holidays.CountryHoliday(nation)
+    return date in holidays.CountryHoliday(nation)
+
+
+def double_contains(value, elements):
+    for element in elements:
+        if value in element:
+            return True
+
+    return False
