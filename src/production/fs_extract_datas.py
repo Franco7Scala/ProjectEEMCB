@@ -70,13 +70,30 @@ local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
 # macrotrends
 if verbose:
     support.colored_print("Downloading data from Macrotrends...", "green")
-# TODO
 
 # crude oil
-local_folders.append(local_saving_folder + "/crude oil.csv")
+oil_saving_folder = local_saving_folder + "/oil"
+try:
+    os.makedirs(oil_saving_folder)
+except os.error:
+    pass
+
+oil_saving_file = oil_saving_folder + "/csv.csv"
+os.remove(oil_saving_file)
+support.download_from_macrotrends("https://www.macrotrends.net/1369/crude-oil-price-history-chart", oil_saving_folder)
+local_folders.append(oil_saving_file)
 
 # natural gas
-local_folders.append(local_saving_folder + "/natural-gas-prices-historical-chart.csv")
+gas_saving_folder = local_saving_folder + "/gas"
+try:
+    os.makedirs(gas_saving_folder)
+except os.error:
+    pass
+
+gas_saving_file = gas_saving_folder + "/csv.csv"
+os.remove(gas_saving_file)
+support.download_from_macrotrends("https://www.macrotrends.net/2478/natural-gas-prices-historical-chart", gas_saving_folder)
+local_folders.append(gas_saving_file)
 
 # sandbag
 if verbose:
@@ -340,7 +357,6 @@ for year in range(2016, datetime.now().year + 1):
                     value.price_oil = price
                     putted = True
                 else:
-                    #print target_date
                     target_date = target_date - timedelta(days=1)
 
             putted = False
@@ -383,3 +399,10 @@ if verbose:
     support.print_progress_bar(100, 100, prefix='Progress:', suffix='Completed', length=50)
 
 support.colored_print("Completed!", "pink")
+
+
+# TODO CHECK
+# funzionamento generale
+# download su server senza UI (options.AddArguments("headless");)
+# inserimento db
+# dati fotovoltaico mancanti

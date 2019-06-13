@@ -10,6 +10,10 @@ sudo pip install MySQL-python
 sudo pip install pysftp
 sudo pip install holidays
 
+sudo pip install selenium
+sudo pip install pathlib
+
+
 
 
 

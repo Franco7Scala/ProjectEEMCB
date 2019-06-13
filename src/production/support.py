@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import holidays
 import sys
+import time
+from selenium import webdriver
+from pathlib import Path
 
 
 BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
@@ -51,3 +54,40 @@ def double_contains(value, elements):
             return True
 
     return False
+
+
+def download_from_macrotrends(url, download_folder):
+    options = webdriver.ChromeOptions()
+    prefs = {
+        "download.default_directory": download_folder,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True
+    }
+    options.add_experimental_option('prefs', prefs)
+    driver = webdriver.Chrome(BASE_PATH_NATIONS + "chromedriver", chrome_options=options)
+    driver.get(url)
+    ul = driver.find_elements_by_id("myTabs")[0]
+    li = ul.find_elements_by_tag_name("li")[1]
+    li.click()
+    iframe = driver.find_elements_by_id("chart_iframe_menu1")[0]
+    driver.switch_to.frame(iframe)
+    button = driver.find_elements_by_id("dataDownload")[0]
+    button.click()
+    finished = False
+    while not finished:
+        time.sleep(1)
+        finished = _is_download_finished(download_folder)
+
+    driver.close()
+
+
+def _is_download_finished(folder):
+    firefox_temp_file = sorted(Path(folder).glob('*.part'))
+    chrome_temp_file = sorted(Path(folder).glob('*.crdownload'))
+    downloaded_files = sorted(Path(folder).glob('*.*'))
+    if (len(firefox_temp_file) == 0) and \
+       (len(chrome_temp_file) == 0) and \
+       (len(downloaded_files) >= 1):
+        return True
+    else:
+        return False
