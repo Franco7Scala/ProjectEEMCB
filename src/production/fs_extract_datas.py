@@ -55,10 +55,17 @@ with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_ent
             for line in data:
                 if not os.path.exists(local_folders[i] + line):
                     sftp.get(line, local_folders[i] + line)
+
+# deleting unnecessary files
+os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
+os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualGenerationOutputPerUnit.csv")
+os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_TransferCapacitiesAllocatedDaily.csv")
 '''
+
 local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
                  local_saving_folder + "/TP_export/ActualGenerationOutputPerUnit/",
                  local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
+
 
 # macrotrends
 if verbose:
