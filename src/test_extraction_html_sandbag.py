@@ -36,6 +36,11 @@ driver.get(url)
 iframe = driver.find_elements_by_xpath('//iframe')[0]
 driver.switch_to.frame(iframe)
 
+driver.execute_script("document.getElementsByClassName('highcharts-contextmenu')[0].style.display = 'block';")
+
+
+#driver.execute_script("(document.getElementsByClassName('highcharts-contextmenu')[0]).style.display = 'block';")
+
 time.sleep(3)
 
 print len(driver.find_elements_by_xpath("//div"))

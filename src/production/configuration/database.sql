@@ -27,6 +27,7 @@ CREATE TABLE production_data (
     production_other FLOAT,
     production_waste FLOAT,
     production_lignite FLOAT,
+    production_other_renewable FLOAT,
     
     PRIMARY KEY (nation_id, day_in_year, hour),
     FOREIGN KEY (nation_id) REFERENCES nation (id)

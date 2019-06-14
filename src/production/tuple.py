@@ -1,7 +1,7 @@
 
 
 class Tuple:
-    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, date = None, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0):
+    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, date = None, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0, production_other_renewable = 0, production_geothermal = 0):
         self.nation = nation
         self.year = year
         self.day_in_year = day_in_year
@@ -25,6 +25,8 @@ class Tuple:
         self.production_other = production_other
         self.production_waste = production_waste
         self.production_lignite = production_lignite
+        self.production_other_renewable = production_other_renewable
+        self.production_geothermal = production_geothermal
 
     def __lt__(self, other):
         if self.nation == other.nation:
@@ -73,4 +75,6 @@ class Tuple:
                "production_nuclear: " + str(self.production_nuclear) + "\t" \
                "production_other: " + str(self.production_other) + "\t" + \
                "production_waste: " + str(self.production_waste) + "\t" \
-               "production_lignite: " + str(self.production_lignite)
+               "production_lignite: " + str(self.production_lignite) + "\t" \
+               "production_other_renewable: " + str(self.production_other_renewable) + "\t" \
+               "production_geothermal: " + str(self.production_geothermal)

@@ -42,8 +42,8 @@ if verbose:
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_entsoe"]["user"], password=dict["sftp_entsoe"]["password"], cnopts=cnopts) as sftp:
-    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/ActualGenerationOutputPerUnit/", "/TP_export/TransferCapacitiesAllocatedDaily/"]
-    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/ActualGenerationOutputPerUnit/", local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
+    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/AggregatedGenerationPerType/", "/TP_export/TransferCapacitiesAllocatedDaily/"]
+    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/AggregatedGenerationPerType/", local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
     for i in range(0, len(entsoe_remote_folders)):
         try:
             os.makedirs(local_folders[i])
@@ -58,12 +58,12 @@ with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_ent
 
 # deleting unnecessary files
 os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
-os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualGenerationOutputPerUnit.csv")
+os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_AggregatedGenerationPerType.csv")
 os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_TransferCapacitiesAllocatedDaily.csv")
 '''
 
 local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
-                 local_saving_folder + "/TP_export/ActualGenerationOutputPerUnit/",
+                 local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
                  local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
 
 
@@ -154,7 +154,7 @@ for year in range(2016, datetime.now().year + 1):
                         bisect.insort(tuples, current_tuple)
 
         # reading file containing production
-        with codecs.open(local_folders[1] + str(year) + "_" + str(month) + "_ActualGenerationOutputPerUnit.csv", "rU") as csv_file:
+        with codecs.open(local_folders[1] + str(year) + "_" + str(month) + "_AggregatedGenerationPerType.csv", "rU") as csv_file:
             csv_reader = csv.reader((x.replace('\0', '') for x in csv_file), delimiter='\t')
             first = True
             for row in csv_reader:
@@ -188,44 +188,53 @@ for year in range(2016, datetime.now().year + 1):
                             break
 
                     # adding generation type value
-                    production_type = str(row[11])
+                    production_type = str(row[9])
                     consumption_source = 0
-                    if str(row[13]) != "":
-                        consumption_source = float(row[13])
+                    if str(row[11]) != "":
+                        consumption_source = float(row[11])
 
-                    if row[12] != "":
+                    if row[10] != "":
                         if "Fossil Gas" in production_type:
-                            current_tuple.production_fossil_gas += float(row[12]) - consumption_source
+                            current_tuple.production_fossil_gas += float(row[10]) - consumption_source
 
                         elif "Hydro" in production_type:
-                            current_tuple.production_hydro += float(row[12]) - consumption_source
+                            current_tuple.production_hydro += float(row[10]) - consumption_source
 
                         elif "Nuclear" in production_type:
-                            current_tuple.production_nuclear += float(row[12]) - consumption_source
+                            current_tuple.production_nuclear += float(row[10]) - consumption_source
 
                         elif "Fossil Oil" in production_type:
-                            current_tuple.production_fossil_oil += float(row[12]) - consumption_source
+                            current_tuple.production_fossil_oil += float(row[10]) - consumption_source
 
                         elif "Fossil Hard coal" in production_type:
-                            current_tuple.production_fossil_hard_coal += float(row[12]) - consumption_source
+                            current_tuple.production_fossil_hard_coal += float(row[10]) - consumption_source
 
                         elif "Fossil Brown coal/Lignite" in production_type:
-                            current_tuple.production_lignite += float(row[12]) - consumption_source
+                            current_tuple.production_lignite += float(row[10]) - consumption_source
 
                         elif "Other" in production_type:
-                            current_tuple.production_other += float(row[12]) - consumption_source
+                            current_tuple.production_other += float(row[10]) - consumption_source
 
                         elif "Biomass" in production_type:
-                            current_tuple.production_biomass += float(row[12]) - consumption_source
+                            current_tuple.production_biomass += float(row[10]) - consumption_source
 
                         elif "Wind" in production_type:
-                            current_tuple.production_wind += float(row[12]) - consumption_source
+                            current_tuple.production_wind += float(row[10]) - consumption_source
 
                         elif "Fossil Coal-derived gas" in production_type:
-                            current_tuple.production_fossil_coal_gas += float(row[12]) - consumption_source
+                            current_tuple.production_fossil_coal_gas += float(row[10]) - consumption_source
 
                         elif "Waste" in production_type:
-                            current_tuple.production_waste += float(row[12]) - consumption_source
+                            current_tuple.production_waste += float(row[10]) - consumption_source
+
+                        elif "Other renewable" in production_type:
+                            current_tuple.production_other_renewable += float(row[10]) - consumption_source
+
+                        elif "Solar" in production_type:
+                            current_tuple.production_pv += float(row[10]) - consumption_source
+
+                        elif "Geothermal" in production_type:
+                            current_tuple.production_geothermal += float(row[10]) - consumption_source
 
                     # saving into list
                     if not found:
