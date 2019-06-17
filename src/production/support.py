@@ -44,8 +44,11 @@ def calculate_relative_error(real_output, expected_output):
 def is_business_day(date, nation):
     if nation == "FR":
         nation = "FRA"
-
-    return date in holidays.CountryHoliday(nation)
+    
+    try:
+        return date in holidays.CountryHoliday(nation)
+    except KeyError:
+        return False
 
 
 def double_contains(value, elements):

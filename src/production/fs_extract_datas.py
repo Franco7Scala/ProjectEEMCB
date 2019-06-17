@@ -1,6 +1,7 @@
 import tuple
 import requests
 import sys
+import pysftp
 import os
 import warnings
 import csv
@@ -38,12 +39,12 @@ with open(support.BASE_PATH_NATIONS + "/db.json", "r") as input_file:
 if verbose:
     support.colored_print("Downloading data from Entsoe...", "green")
 
-'''
+
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_entsoe"]["user"], password=dict["sftp_entsoe"]["password"], cnopts=cnopts) as sftp:
-    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/AggregatedGenerationPerType/", "/TP_export/TransferCapacitiesAllocatedDaily/"]
-    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/AggregatedGenerationPerType/", local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
+    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/AggregatedGenerationPerType/", "/TP_export/UseOfTransferCapacityDaily/"]
+    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/AggregatedGenerationPerType/", local_saving_folder + "/TP_export/UseOfTransferCapacityDaily/"]
     for i in range(0, len(entsoe_remote_folders)):
         try:
             os.makedirs(local_folders[i])
@@ -57,14 +58,14 @@ with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_ent
                     sftp.get(line, local_folders[i] + line)
 
 # deleting unnecessary files
-os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
-os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_AggregatedGenerationPerType.csv")
-os.remove(local_folders[i] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_TransferCapacitiesAllocatedDaily.csv")
-'''
+os.remove(local_folders[0] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
+os.remove(local_folders[1] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_AggregatedGenerationPerType.csv")
+os.remove(local_folders[2] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_UseOfTransferCapacityDaily.csv")
+
 
 local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
                  local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
-                 local_saving_folder + "/TP_export/TransferCapacitiesAllocatedDaily/"]
+                 local_saving_folder + "/TP_export/UseOfTransferCapacityDaily/"]
 
 
 # macrotrends
@@ -79,7 +80,11 @@ except os.error:
     pass
 
 oil_saving_file = oil_saving_folder + "/csv.csv"
-os.remove(oil_saving_file)
+try:
+    os.remove(oil_saving_file)
+except os.error:
+    pass
+
 support.download_from_macrotrends("https://www.macrotrends.net/1369/crude-oil-price-history-chart", oil_saving_folder)
 local_folders.append(oil_saving_file)
 
@@ -91,13 +96,17 @@ except os.error:
     pass
 
 gas_saving_file = gas_saving_folder + "/csv.csv"
-os.remove(gas_saving_file)
+try:
+    os.remove(gas_saving_file)
+except os.error:
+    pass
+
 support.download_from_macrotrends("https://www.macrotrends.net/2478/natural-gas-prices-historical-chart", gas_saving_folder)
 local_folders.append(gas_saving_file)
 
 # quandl
 if verbose:
-    support.colored_print("Downloading data from Sandbag...", "green")
+    support.colored_print("Downloading data from Quandl...", "green")
 
 # carbon
 http_request = requests.get('https://www.quandl.com/api/v3/datasets/CHRIS/ICE_C1.csv?api_key=-q3ecFz_jdpZBNM73ozq')
@@ -137,13 +146,14 @@ for year in range(2016, datetime.now().year + 1):
                     if not support.double_contains(row[8], dict["nations"]):
                         continue
 
-                    current_date = datetime.datetime(int(row[0]), int(row[1]), int(row[2]))
+                    current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
                     current_tuple = tuple.Tuple()
                     current_tuple.nation = row[8]
                     current_tuple.year = year
                     current_tuple.day_in_year = current_date.timetuple().tm_yday
                     current_tuple.hour = int(str(row[3])[11:13])
                     current_tuple.holiday = support.is_business_day(current_date, current_tuple.nation)
+                    current_tuple.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -246,7 +256,7 @@ for year in range(2016, datetime.now().year + 1):
                         bisect.insort(tuples, current_tuple)
 
         # reading file containing transits
-        with open(local_folders[2] + str(year) + "_" + str(month) + "_TransferCapacitiesAllocatedDaily.csv") as csv_file:
+        with open(local_folders[2] + str(year) + "_" + str(month) + "_UseOfTransferCapacityDaily.csv") as csv_file:
             csv_reader = csv.reader((x.replace('\0', '') for x in csv_file), delimiter='\t')
             first = True
             for row in csv_reader:
@@ -266,12 +276,12 @@ for year in range(2016, datetime.now().year + 1):
                     current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
                     # tuple in
                     current_tuple_in = tuple.Tuple()
-                    current_tuple_in.nation = row[11]
+                    current_tuple_in.nation = row[15]
                     current_tuple_in.year = year
                     current_tuple_in.day_in_year = current_date.timetuple().tm_yday
                     current_tuple_in.hour = int(str(row[3])[11:13])
                     current_tuple_in.holiday = support.is_business_day(current_date, current_tuple_in.nation)
-                    current_tuple.date = current_date
+                    current_tuple_in.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -282,12 +292,12 @@ for year in range(2016, datetime.now().year + 1):
 
                     # tuple out
                     current_tuple_out = tuple.Tuple()
-                    current_tuple_out.nation = row[15]
+                    current_tuple_out.nation = row[11]
                     current_tuple_out.year = year
                     current_tuple_out.day_out_year = current_date.timetuple().tm_yday
                     current_tuple_out.hour = int(str(row[3])[11:13])
                     current_tuple_out.holiday = support.is_business_day(current_date, current_tuple_out.nation)
-                    current_tuple.date = current_date
+                    current_tuple_out.date = current_date
                     # checking if tuple's day already encountered
                     found = False
                     for value in tuples:
@@ -397,9 +407,9 @@ for year in range(2016, datetime.now().year + 1):
                              passwd=db_dict["password"],
                              db=db_dict["database"])
         cursor = db.cursor()
-        query = "INSERT INTO production_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO production_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         for value in tuples:
-            val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite)
+            val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
             cursor.execute(query, val)
 
         db.commit()
@@ -410,7 +420,7 @@ if verbose:
 support.colored_print("Completed!", "pink")
 
 
-# TODO CHECK
+# TODO CH
 # funzionamento generale
 # download su server senza UI (options.AddArguments("headless");)
 # inserimento db
