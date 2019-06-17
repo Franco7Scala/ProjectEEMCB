@@ -1,4 +1,14 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+
+import requests
+
+from datetime import datetime, timedelta
+
+import csv
+
 import time
 import os
 from pathlib import Path
@@ -15,67 +25,38 @@ def is_download_finished(temp_folder):
     else:
         return False
 
-
-
-url = "https://sandbag.org.uk/carbon-price-viewer/"
-download_folder = "/Users/francesco/Desktop/Cose da Sistemare/test_p/raw_data"
+BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
 
 
 
-options = webdriver.ChromeOptions()
-prefs = {
-    "download.default_directory": download_folder,
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True
-}
-options.add_experimental_option('prefs', prefs)
-driver = webdriver.Chrome("/Users/francesco/Desktop/Cose da Sistemare/test_p/chromedriver", chrome_options=options)
-driver.get(url)
+local_saving_folder = BASE_PATH_NATIONS + "raw_data"
 
 
-iframe = driver.find_elements_by_xpath('//iframe')[0]
-driver.switch_to.frame(iframe)
+# carbon
+http_request = requests.get('https://www.quandl.com/api/v3/datasets/CHRIS/ICE_C1.csv?api_key=-q3ecFz_jdpZBNM73ozq')
 
-driver.execute_script("document.getElementsByClassName('highcharts-contextmenu')[0].style.display = 'block';")
+with open(local_saving_folder + "/carbon.csv", "w") as carbon_file:
+    carbon_file.write(http_request.text)
+
+carbon_prices = {}
+with open(local_saving_folder + "/carbon.csv") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    first = True
+    for row in csv_reader:
+        if first:
+            first = False
+
+        else:
+            raw_date = str(str(row[0]).split(' ')[0]).split('-')
+            current_date = datetime(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
+            carbon_prices[current_date] = float(row[4])
 
 
-#driver.execute_script("(document.getElementsByClassName('highcharts-contextmenu')[0]).style.display = 'block';")
-
-time.sleep(3)
-
-print len(driver.find_elements_by_xpath("//div"))
-
-#//*[contains(@class, 'highcharts-button')
-
+for a in carbon_prices:
+    print str(a) + " " + str(carbon_prices[a])
 
 
 
 
 
 
-"""
-lined_button = driver.find_elements_by_xpath("//*[name()='svg']//*[name()='g']")[23]
-lined_button.click()
-
-finished = False
-while not finished:
-    time.sleep(1)
-    finished = is_download_finished(download_folder)
-
-#driver.close()
-
-
-
-lined_button = driver.find_elements_by_xpath("//*[name()='svg']/*[name()='g']")[13]
-lined_button.click()
-
-buttons = driver.find_elements_by_class_name("highcharts-menu-item")
-
-print len(buttons)
-
-buttons[5].click()
-
-
-
-
-"""

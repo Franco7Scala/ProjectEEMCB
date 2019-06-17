@@ -1,5 +1,5 @@
 import tuple
-import pysftp
+import requests
 import sys
 import os
 import warnings
@@ -95,12 +95,17 @@ os.remove(gas_saving_file)
 support.download_from_macrotrends("https://www.macrotrends.net/2478/natural-gas-prices-historical-chart", gas_saving_folder)
 local_folders.append(gas_saving_file)
 
-# sandbag
+# quandl
 if verbose:
     support.colored_print("Downloading data from Sandbag...", "green")
 
-local_folders.append(local_saving_folder + "/carbon.csv")
+# carbon
+http_request = requests.get('https://www.quandl.com/api/v3/datasets/CHRIS/ICE_C1.csv?api_key=-q3ecFz_jdpZBNM73ozq')
 
+with open(local_saving_folder + "/carbon.csv", "w") as carbon_file:
+    carbon_file.write(http_request.text)
+
+local_folders.append(local_saving_folder + "/carbon.csv")
 # aggregating datas
 if verbose:
     support.colored_print("Aggregating datas...", "green")
@@ -349,12 +354,7 @@ for year in range(2016, datetime.now().year + 1):
                 else:
                     raw_date = str(str(row[0]).split(' ')[0]).split('-')
                     current_date = datetime(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
-                    if len(row) > 2:
-                        price = float(row[1] + "." + row[2])
-                    else:
-                        price = float(row[1])
-
-                    carbon_prices[current_date] = price
+                    carbon_prices[current_date] = float(row[4])
 
         # applying prices to tuples
         for value in tuples:
@@ -414,4 +414,3 @@ support.colored_print("Completed!", "pink")
 # funzionamento generale
 # download su server senza UI (options.AddArguments("headless");)
 # inserimento db
-# dati fotovoltaico mancanti
