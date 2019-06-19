@@ -6,12 +6,12 @@ import support
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    support.colored_print("Usage:\n\t-parameter 1: nation id (int)", "red")
+    support.colored_print("Usage:\n\t-parameter 1: nation code", "red")
     sys.exit(0)
 
-nation_id = sys.argv[1]
+nation_code = sys.argv[1]
 
-nation = Nation.load_nation(nation_id)
+nation = Nation.load_nation(nation_code)
 files = os.listdir(nation.base_path_datas)
 files.sort()
 for file in files:

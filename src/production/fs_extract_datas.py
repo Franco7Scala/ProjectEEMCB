@@ -458,7 +458,7 @@ for year in range(2016, datetime.now().year + 1):
         cursor = db.cursor()
         query = "INSERT INTO production_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         for value in tuples:
-            val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
+            val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
             cursor.execute(query, val)
 
         db.commit()
@@ -471,5 +471,5 @@ support.colored_print("Completed!", "pink")
 
 # TODO
 # funzionamento generale
+# non reinserire cose gia messe
 # download su server senza UI (options.AddArguments("headless");)
-# inserimento db

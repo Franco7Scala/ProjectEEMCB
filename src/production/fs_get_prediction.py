@@ -14,15 +14,15 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    support.colored_print("Usage:\n\t-parameter 1: nation id (int)\n\t-parameter 2: source id (int)\n\t-parameter 3: input (array)\n\t-parameter 4: verbose (bool)", "red")
+    support.colored_print("Usage:\n\t-parameter 1: nation code\n\t-parameter 2: source id (int)\n\t-parameter 3: input (array)\n\t-parameter 4: verbose (bool)", "red")
     sys.exit(0)
 
-nation_id = sys.argv[1]
+nation_code = sys.argv[1]
 source_id = int(sys.argv[2])
 input = numpy.asanyarray([float(i) for i in sys.argv[3].split(" ")]).reshape(1, -1)
 verbose = bool(sys.argv[4])
 
-nation = Nation.load_nation(nation_id)
+nation = Nation.load_nation(nation_code)
 path_model = nation.base_path_datas + nation.sources[source_id].path_model
 if verbose:
     support.colored_print("Loading model...", "green")

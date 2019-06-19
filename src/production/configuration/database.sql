@@ -1,10 +1,14 @@
+DROP SCHEMA eemcb;
+CREATE SCHEMA eemcb;
+USE eemcb;
+
 CREATE TABLE nation (
-	id INTEGER PRIMARY KEY,
+	code VARCHAR(5) PRIMARY KEY,
     name VARCHAR(50)
 );
 
 CREATE TABLE production_data (
-	nation_id INTEGER,
+	nation_code VARCHAR(5),
 	year INTEGER,
     day_in_year INTEGER,
     holiday BOOL,
@@ -28,7 +32,16 @@ CREATE TABLE production_data (
     production_waste FLOAT,
     production_lignite FLOAT,
     production_other_renewable FLOAT,
-    
-    PRIMARY KEY (nation_id, day_in_year, hour),
-    FOREIGN KEY (nation_id) REFERENCES nation (id)
+    production_other_geothermal FLOAT,
+
+    PRIMARY KEY (nation_code, day_in_year, hour),
+    FOREIGN KEY (nation_code) REFERENCES nation (code)
 );
+
+
+INSERT INTO nation VALUES ('IT', 'Italy');
+INSERT INTO nation VALUES ('DE', 'Germany');
+INSERT INTO nation VALUES ('BE', 'Belgium');
+INSERT INTO nation VALUES ('CH', 'Switzerland');
+INSERT INTO nation VALUES ('FR', 'France');
+INSERT INTO nation VALUES ('NL', 'Netherlands');

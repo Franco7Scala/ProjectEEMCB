@@ -1,7 +1,7 @@
 
 
 class Tuple:
-    def __init__(self, nation = None, year = 0, day_in_year = 0, hour = 0, holiday = False, date = None, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0, production_other_renewable = 0, production_geothermal = 0):
+    def __init__(self, nation = "", year = 0, day_in_year = 0, hour = 0, holiday = False, date = None, production_pv = 0, production_hydro = 0, production_biomass = 0, production_wind = 0, consumption = 0, transits = 0, price_oil = 0, price_gas = 0, price_carbon = 0, production_fossil_coal_gas = 0, production_fossil_gas = 0, production_fossil_hard_coal = 0, production_fossil_oil = 0, production_nuclear = 0, production_other = 0, production_waste = 0, production_lignite = 0, production_other_renewable = 0, production_geothermal = 0):
         self.nation = nation
         self.year = year
         self.day_in_year = day_in_year

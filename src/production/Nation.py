@@ -3,8 +3,8 @@ import json
 
 
 class Nation:
-    def __init__(self, id, name = "", base_path_datas = "", path_training_set_prediction_rf = "", path_training_set_prediction_wp = "", path_training_set_prediction_wpwl = "", path_training_set_prediction_wpaw = ""):
-        self.id = id
+    def __init__(self, code, name = "", base_path_datas = "", path_training_set_prediction_rf = "", path_training_set_prediction_wp = "", path_training_set_prediction_wpwl = "", path_training_set_prediction_wpaw = ""):
+        self.code = code
         self.name = name
         self.base_path_datas = base_path_datas
         self.path_training_set_prediction_rf = path_training_set_prediction_rf
@@ -19,7 +19,7 @@ class Nation:
         sources = ""
         for source in self.sources:
             sources += "\n" + str(source)
-        return "id: " + str(self.id) + "\n" + \
+        return "code: " + str(self.code) + "\n" + \
                "name: " + str(self.name) + "\n" + \
                "base_path_datas: " + str(self.base_path_datas) + "\n" + \
                "path_training_set_prediction_rf: " + str(self.path_training_set_prediction_rf) + "\n" + \
@@ -55,12 +55,12 @@ class Production:
                "path_statistics_training: " + self.path_statistics_training + "\n"
 
 
-def load_nation(id):
-    result = Nation(id)
-    with open(support.BASE_PATH_NATIONS + "/" + str(id) + ".json", "r") as input_file:
+def load_nation(code):
+    result = Nation(code)
+    with open(support.BASE_PATH_NATIONS + "/" + str(code) + ".json", "r") as input_file:
         dict = json.load(input_file)
 
-    result.id = int(dict["nation"]["id"])
+    result.code = int(dict["nation"]["code"])
     result.name = dict["nation"]["name"]
     result.base_path_datas = dict["nation"]["base_path_datas"]
     result.path_training_set_prediction_rf = dict["nation"]["path_training_set_prediction_rf"]

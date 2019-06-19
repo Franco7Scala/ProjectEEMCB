@@ -20,14 +20,14 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    support.colored_print("Usage:\n\t-parameter 1: nation id (int)\n\t-parameter 2: source id (int)\n\t-parameter 3: verbose (bool)", "red")
+    support.colored_print("Usage:\n\t-parameter 1: nation code\n\t-parameter 2: source id (int)\n\t-parameter 3: verbose (bool)", "red")
     sys.exit(0)
 
-nation_id = sys.argv[1]
+nation_code = sys.argv[1]
 source_id = int(sys.argv[2])
 verbose = bool(sys.argv[3])
 
-nation = Nation.load_nation(nation_id)
+nation = Nation.load_nation(nation_code)
 
 selected_model = Model.Model(nation.sources[source_id].best_model)
 training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_prediction)
