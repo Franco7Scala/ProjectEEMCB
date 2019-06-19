@@ -27,6 +27,36 @@ if len(sys.argv) == 1 or sys.argv[1] == "help":
 #verbose = bool(sys.argv[1])
 verbose = True
 
+
+
+
+
+
+
+#TMP
+
+with open(support.BASE_PATH_NATIONS + "/extraction.json", "r") as input_file:
+    dict = json.load(input_file)
+
+with open(support.BASE_PATH_NATIONS + "/db.json", "r") as input_file:
+    db_dict = json.load(input_file)
+
+local_saving_folder = support.BASE_PATH_NATIONS + "raw_data"
+oil_saving_folder = local_saving_folder + "/oil"
+oil_saving_file = oil_saving_folder + "/csv.csv"
+gas_saving_folder = local_saving_folder + "/gas"
+gas_saving_file = gas_saving_folder + "/csv.csv"
+local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
+                 local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
+                 local_saving_folder + "/TP_export/CrossBorderPhysicalFlow/",
+                 oil_saving_file,
+                 gas_saving_file,
+                 local_saving_folder + "/carbon.csv"]
+
+
+
+
+'''
 local_saving_folder = support.BASE_PATH_NATIONS + "raw_data"
 with open(support.BASE_PATH_NATIONS + "/extraction.json", "r") as input_file:
     dict = json.load(input_file)
@@ -43,8 +73,8 @@ if verbose:
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_entsoe"]["user"], password=dict["sftp_entsoe"]["password"], cnopts=cnopts) as sftp:
-    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/AggregatedGenerationPerType/", "/TP_export/UseOfTransferCapacityDaily/"]
-    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/AggregatedGenerationPerType/", local_saving_folder + "/TP_export/UseOfTransferCapacityDaily/"]
+    entsoe_remote_folders = ["/TP_export/ActualTotalLoad/", "/TP_export/AggregatedGenerationPerType/", "/TP_export/CrossBorderPhysicalFlow/"]
+    local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/", local_saving_folder + "/TP_export/AggregatedGenerationPerType/", local_saving_folder + "/TP_export/CrossBorderPhysicalFlow/"]
     for i in range(0, len(entsoe_remote_folders)):
         try:
             os.makedirs(local_folders[i])
@@ -60,12 +90,12 @@ with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_ent
 # deleting unnecessary files
 os.remove(local_folders[0] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
 os.remove(local_folders[1] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_AggregatedGenerationPerType.csv")
-os.remove(local_folders[2] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_UseOfTransferCapacityDaily.csv")
+os.remove(local_folders[2] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_CrossBorderPhysicalFlow.csv")
 
 
 local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
                  local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
-                 local_saving_folder + "/TP_export/UseOfTransferCapacityDaily/"]
+                 local_saving_folder + "/TP_export/CrossBorderPhysicalFlow/"]
 
 
 # macrotrends
@@ -115,6 +145,7 @@ with open(local_saving_folder + "/carbon.csv", "w") as carbon_file:
     carbon_file.write(http_request.text)
 
 local_folders.append(local_saving_folder + "/carbon.csv")
+'''
 # aggregating datas
 if verbose:
     support.colored_print("Aggregating datas...", "green")
@@ -143,7 +174,13 @@ for year in range(2016, datetime.now().year + 1):
                     if not (int(row[0]) == year and int(row[1]) == month):
                         continue
 
+                    if int(str(row[3])[14:16]) != 0:
+                        continue
+
                     if not support.double_contains(row[8], dict["nations"]):
+                        continue
+
+                    if "CA" in row[7]:
                         continue
 
                     current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
@@ -184,6 +221,12 @@ for year in range(2016, datetime.now().year + 1):
                         continue
 
                     if not (int(row[0]) == year and int(row[1]) == month):
+                        continue
+
+                    if int(str(row[3])[14:16]) != 0:
+                        continue
+
+                    if "CA" not in row[7]:
                         continue
 
                     current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
@@ -256,7 +299,7 @@ for year in range(2016, datetime.now().year + 1):
                         bisect.insort(tuples, current_tuple)
 
         # reading file containing transits
-        with open(local_folders[2] + str(year) + "_" + str(month) + "_UseOfTransferCapacityDaily.csv") as csv_file:
+        with open(local_folders[2] + str(year) + "_" + str(month) + "_CrossBorderPhysicalFlow.csv") as csv_file:
             csv_reader = csv.reader((x.replace('\0', '') for x in csv_file), delimiter='\t')
             first = True
             for row in csv_reader:
@@ -270,51 +313,57 @@ for year in range(2016, datetime.now().year + 1):
                     if not (int(row[0]) == year and int(row[1]) == month):
                         continue
 
-                    if not (support.double_contains(row[11], dict["nations"]) or support.double_contains(row[15], dict["nations"])):
+                    if int(str(row[3])[14:16]) != 0:
+                        continue
+
+                    if not (support.double_contains(row[8], dict["nations"]) or support.double_contains(row[12], dict["nations"])):
+                        continue
+
+                    if "CA" not in row[7] and "CA" not in row[11]:
                         continue
 
                     current_date = datetime(int(row[0]), int(row[1]), int(row[2]))
                     # tuple in
                     current_tuple_in = tuple.Tuple()
-                    current_tuple_in.nation = row[15]
+                    current_tuple_in.nation = row[12]
                     current_tuple_in.year = year
                     current_tuple_in.day_in_year = current_date.timetuple().tm_yday
                     current_tuple_in.hour = int(str(row[3])[11:13])
                     current_tuple_in.holiday = support.is_business_day(current_date, current_tuple_in.nation)
                     current_tuple_in.date = current_date
                     # checking if tuple's day already encountered
-                    found = False
+                    found_in = False
                     for value in tuples:
                         if value == current_tuple_in:
                             current_tuple_in = value
-                            found = True
+                            found_in = True
                             break
 
                     # tuple out
                     current_tuple_out = tuple.Tuple()
-                    current_tuple_out.nation = row[11]
+                    current_tuple_out.nation = row[8]
                     current_tuple_out.year = year
-                    current_tuple_out.day_out_year = current_date.timetuple().tm_yday
+                    current_tuple_out.day_in_year = current_date.timetuple().tm_yday
                     current_tuple_out.hour = int(str(row[3])[11:13])
                     current_tuple_out.holiday = support.is_business_day(current_date, current_tuple_out.nation)
                     current_tuple_out.date = current_date
                     # checking if tuple's day already encountered
-                    found = False
+                    found_out = False
                     for value in tuples:
                         if value == current_tuple_out:
                             current_tuple_out = value
-                            found = True
+                            found_out = True
                             break
 
                     if support.double_contains(current_tuple_in.nation, dict["nations"]):
-                        current_tuple_in.transits += float(row[16])
+                        current_tuple_in.transits -= float(row[13])
+                        if not found_in:
+                            bisect.insort(tuples, current_tuple_in)
 
                     if support.double_contains(current_tuple_out.nation, dict["nations"]):
-                        current_tuple_out.transits -= float(row[16])
-
-                    # saving into list
-                    if not found:
-                        bisect.insort(tuples, current_tuple)
+                        current_tuple_out.transits += float(row[13])
+                        if not found_out:
+                            bisect.insort(tuples, current_tuple_out)
 
         # reading file containing price oil and natural gas
         oil_prices = {}
@@ -420,7 +469,7 @@ if verbose:
 support.colored_print("Completed!", "pink")
 
 
-# TODO CH
+# TODO
 # funzionamento generale
 # download su server senza UI (options.AddArguments("headless");)
 # inserimento db
