@@ -1,6 +1,6 @@
 from __future__ import division
 import sys
-import Nation
+import nation
 import support
 import warnings
 import MySQLdb
@@ -19,27 +19,23 @@ if len(sys.argv) == 1 or sys.argv[1] == "help":
 nation_code = sys.argv[1]
 verbose = bool(sys.argv[2])
 
-nation = Nation.load_nation(nation_code)
+nation = nation.load_nation(nation_code)
 
 # building datasets
 # extracting inputs and outputs
 # getting datas from database
-with open(support.BASE_PATH_NATIONS + "/db.json", "r") as input_file:
+with open(support.BASE_PATH_RESOURCES + "/db.json", "r") as input_file:
     dict = json.load(input_file)
 
-db = MySQLdb.connect(host=dict["host"],
-                     user=dict["user"],
-                     passwd=dict["password"],
-                     db=dict["database"])
+db = MySQLdb.connect(host=dict["host"], user=dict["user"], passwd=dict["password"], db=dict["database"])
 
-columns_name = ["nation_id", "day_in_year", "holiday", "hour", "production_pv", "production_hydro", "production_biomass", "production_wind", "consumption", "transits", "price_oil", "price_gas", "price_gas", "price_carbon", "production_fossil_fossil_coal_gas", "production_fossil_gas", "production_fossil_hard_coal", "production_fossil_oil", "production_nuclear", "production_other", "production_waste", "production_lignite"]
 cursor = db.cursor()
 columns_to_keep = ""
-for input_index in nation.indexes_inputs:
-    columns_to_keep += columns_name[input_index] + ", "
+for column_name in nation.columns_inputs:
+    columns_to_keep += column_name + ", "
 
-for output_index in nation.indexes_outputs:
-    columns_to_keep += columns_name[output_index] + ", "
+for column_name in nation.columns_outputs:
+    columns_to_keep += column_name + ", "
 
 columns_to_keep = columns_to_keep[:-2]
 cursor.execute("SELECT " + columns_to_keep + " FROM production_data")

@@ -13,55 +13,23 @@ import codecs
 from datetime import datetime, timedelta
 
 
-
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    #support.colored_print("Usage:\n\t-parameter 1: verbose (bool)", "red")
-    #sys.exit(0)
+    support.colored_print("Usage:\n\t-parameter 1: verbose (bool)", "red")
+    sys.exit(0)
     pass
 
-#verbose = bool(sys.argv[1])
-verbose = True
-
-
-
-
-
-
-
-#TMP
-
-with open(support.BASE_PATH_NATIONS + "/extraction.json", "r") as input_file:
-    dict = json.load(input_file)
-
-with open(support.BASE_PATH_NATIONS + "/db.json", "r") as input_file:
-    db_dict = json.load(input_file)
+verbose = bool(sys.argv[1])
 
 local_saving_folder = support.BASE_PATH_NATIONS + "raw_data"
-oil_saving_folder = local_saving_folder + "/oil"
-oil_saving_file = oil_saving_folder + "/csv.csv"
-gas_saving_folder = local_saving_folder + "/gas"
-gas_saving_file = gas_saving_folder + "/csv.csv"
-local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
-                 local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
-                 local_saving_folder + "/TP_export/CrossBorderPhysicalFlow/",
-                 oil_saving_file,
-                 gas_saving_file,
-                 local_saving_folder + "/carbon.csv"]
-
-
-
-
-'''
-local_saving_folder = support.BASE_PATH_NATIONS + "raw_data"
-with open(support.BASE_PATH_NATIONS + "/extraction.json", "r") as input_file:
+with open(support.BASE_PATH_RESOURCES + "/extraction.json", "r") as input_file:
     dict = json.load(input_file)
 
-with open(support.BASE_PATH_NATIONS + "/db.json", "r") as input_file:
+with open(support.BASE_PATH_RESOURCES + "/db.json", "r") as input_file:
     db_dict = json.load(input_file)
 
 # downloading files
@@ -145,20 +113,19 @@ with open(local_saving_folder + "/carbon.csv", "w") as carbon_file:
     carbon_file.write(http_request.text)
 
 local_folders.append(local_saving_folder + "/carbon.csv")
-'''
+
 # aggregating datas
 if verbose:
     support.colored_print("Aggregating datas...", "green")
 
+# getting latest import date
 db = MySQLdb.connect(host=db_dict["host"], user=db_dict["user"], passwd=db_dict["password"], db=db_dict["database"])
 cursor = db.cursor()
 cursor.execute("SELECT MAX(year) FROM production_data")
-
-if cursor.rowcount == 0:
+start_year = cursor.fetchone()[0]
+if start_year is None:
     start_date = datetime(2016, 1, 1)
-
 else:
-    start_year = cursor.fetchone()[0]
     cursor.execute("SELECT MAX(day_in_year) FROM production_data WHERE year = " + str(start_year))
     day_in_year = cursor.fetchone()[0]
     start_date = datetime(start_year, 1, 1) + timedelta(day_in_year)
@@ -478,5 +445,4 @@ support.colored_print("Completed!", "pink")
 
 
 # TODO
-# funzionamento generale
 # download su server senza UI (options.AddArguments("headless");)

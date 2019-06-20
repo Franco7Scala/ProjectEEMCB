@@ -1,0 +1,27 @@
+{
+	"nation": {
+		"code": "CH",
+		"name": "Switzerland",
+		"base_path_datas": "/HERE/nations/CH",
+		"path_training_set_prediction_rf": "/dataset_rf.txt",
+		"path_training_set_prediction_wp": "/dataset_wp.txt",
+		"path_training_set_prediction_wpwl": "/dataset_wpwl.txt",
+		"path_training_set_prediction_wpaw": "/dataset_wpaw.txt",
+		"columns_inputs": "day_in_year holiday hour production_pv production_hydro production_wind consumption transits",
+		"columns_outputs": "production_nuclear",
+		"sources": {
+			"production": [{
+					"id": 0,
+					"name": "Nuclear",
+					"best_k": 1,
+					"k_weighted": true,
+					"best_model": "GBRT",
+					"path_model": "/model_0.joblib",
+					"path_training_set_prediction": "/dataset_wpwl.txt",
+					"path_training_set_error": "/error_0.txt",
+					"path_statistics_training": "/verbose_out_0.txt"
+				}
+			]
+		}
+	}
+}

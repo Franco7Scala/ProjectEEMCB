@@ -1,14 +1,11 @@
 from __future__ import division
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 from sklearn.ensemble import ExtraTreesRegressor, GradientBoostingRegressor
 from sklearn.externals import joblib
 import time
 import sys
 import os
 import knn
-import Nation
-import Model
+import nation
 import parser
 import support
 import warnings
@@ -27,25 +24,23 @@ nation_code = sys.argv[1]
 source_id = int(sys.argv[2])
 verbose = bool(sys.argv[3])
 
-nation = Nation.load_nation(nation_code)
+nation = nation.load_nation(nation_code)
 
-selected_model = Model.Model(nation.sources[source_id].best_model)
+selected_model = nation.sources[source_id].best_model
 training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_prediction)
 test_size = 200
 train_size = len(training_set_input) - test_size
 training_set_output = training_set_output[:, source_id]
 
 # setup
-if selected_model == Model.Model.EXTRA_TREE_REGRESSOR:
+if selected_model == "EXTRA_TREE_REGRESSOR":
     model = ExtraTreesRegressor(criterion="mse")
     model_name = "EXTRA_TREE_REGRESSOR"
-elif selected_model == Model.Model.GRADIENT_BOOSTING_REGRESSOR:
+
+elif selected_model == "GBRT":
     model = GradientBoostingRegressor(loss="lad", n_estimators=200)
-    model_name = "GRADIENT_BOOSTING_REGRESSOR"
-elif selected_model == Model.Model.GPML:
-    kernel = DotProduct() + WhiteKernel()
-    model = GaussianProcessRegressor(kernel=kernel, random_state=0)
-    model_name = "GPML"
+    model_name = "GBRT"
+
 else:
     support.colored_print("No method selected!", "red")
     sys.exit(0)

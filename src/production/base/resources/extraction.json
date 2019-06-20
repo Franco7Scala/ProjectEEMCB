@@ -1,0 +1,8 @@
+{ 
+	"sftp_entsoe": { 
+		"host": "sftp-transparency.entsoe.eu",
+		"user": "francesco.scala@unical.it",
+		"password": "scalaPass1"
+},
+	"nations": ["IT", "DE", "BE", "CH", "FR", "NL"]
+}

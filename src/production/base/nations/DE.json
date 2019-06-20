@@ -1,0 +1,93 @@
+{
+	"nation": {
+		"code": "DE",
+		"name": "Germany",
+		"base_path_datas": "/HERE/nations/DE",
+		"path_training_set_prediction_rf": "/dataset_rf.txt",
+		"path_training_set_prediction_wp": "/dataset_wp.txt",
+		"path_training_set_prediction_wpwl": "/dataset_wpwl.txt",
+		"path_training_set_prediction_wpaw": "/dataset_wpaw.txt",
+		"columns_inputs": "day_in_year holiday hour production_pv production_hydro production_biomass production_wind consumption transits price_oil price_gas price_carbon",
+		"columns_outputs": "production_lignite production_fossil_coal_gas production_fossil_gas production_fossil_hard_coal production_nuclear production_other production_waste",
+		"sources": {
+			"production": [{
+					"id": 0,
+					"name": "Lignite",
+					"best_k": 1,
+					"k_weighted": true,
+					"best_model": "EXTRA_TREE_REGRESSOR",
+					"path_model": "/model_0.joblib",
+					"path_training_set_prediction": "/dataset_wp.txt",
+					"path_training_set_error": "/error_0.txt",
+					"path_statistics_training": "/verbose_out_0.txt"
+				},
+				{
+					"id": 1,
+					"name": "Fossil coal derived gas",
+					"best_k": 14,
+					"k_weighted": true,
+					"best_model": "GBRT",
+					"path_model": "/model_1.joblib",
+					"path_training_set_prediction": "/dataset_wpaw.txt",
+					"path_training_set_error": "/error_1.txt",
+					"path_statistics_training": "/verbose_out_1.txt"
+				},
+				{
+					"id": 2,
+					"name": "Fossil gas",
+					"best_k": 32,
+					"k_weighted": false,
+					"best_model": "GBRT",
+					"path_model": "/model_2.joblib",
+					"path_training_set_prediction": "/dataset_wpwl.txt",
+					"path_training_set_error": "/error_2.txt",
+					"path_statistics_training": "/verbose_out_2.txt"
+				},
+				{
+					"id": 3,
+					"name": "Fossil hard coal",
+					"best_k": 1,
+					"k_weighted": false,
+					"best_model": "EXTRA_TREE_REGRESSOR",
+					"path_model": "/model_3.joblib",
+					"path_training_set_prediction": "/dataset_wp.txt",
+					"path_training_set_error": "/error_3.txt",
+					"path_statistics_training": "/verbose_out_3.txt"
+				},
+				{
+					"id": 4,
+					"name": "Nuclear",
+					"best_k": 1,
+					"k_weighted": false,
+					"best_model": "EXTRA_TREE_REGRESSOR",
+					"path_model": "/model_4.joblib",
+					"path_training_set_prediction": "/dataset_wp.txt",
+					"path_training_set_error": "/error_4.txt",
+					"path_statistics_training": "/verbose_out_4.txt"
+				},
+				{
+					"id": 5,
+					"name": "Other",
+					"best_k": 25,
+					"k_weighted": false,
+					"best_model": "EXTRA_TREE_REGRESSOR",
+					"path_model": "/model_5.joblib",
+					"path_training_set_prediction": "/dataset_wpaw.txt",
+					"path_training_set_error": "/error_5.txt",
+					"path_statistics_training": "/verbose_out_5.txt"
+				},
+				{
+					"id": 6,
+					"name": "Waste",
+					"best_k": 2,
+					"k_weighted": false,
+					"best_model": "EXTRA_TREE_REGRESSOR",
+					"path_model": "/model_6.joblib",
+					"path_training_set_prediction": "/dataset_rf.txt",
+					"path_training_set_error": "/error_6.txt",
+					"path_statistics_training": "/verbose_out_6.txt"
+				}
+			]
+		}
+	}
+}

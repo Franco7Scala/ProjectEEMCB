@@ -1,5 +1,5 @@
 from sklearn.externals import joblib
-import Nation
+import nation
 import parser
 import sys
 import support
@@ -22,7 +22,7 @@ source_id = int(sys.argv[2])
 input = numpy.asanyarray([float(i) for i in sys.argv[3].split(" ")]).reshape(1, -1)
 verbose = bool(sys.argv[4])
 
-nation = Nation.load_nation(nation_code)
+nation = nation.load_nation(nation_code)
 path_model = nation.base_path_datas + nation.sources[source_id].path_model
 if verbose:
     support.colored_print("Loading model...", "green")

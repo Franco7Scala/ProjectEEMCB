@@ -1,4 +1,4 @@
-import Element
+import element
 import heapq
 
 
@@ -33,7 +33,7 @@ def _find_k_neighbors(input, samples, errors, k):
     result = []
     heapq.heapify(result)
     for i in range(0, len(samples)):
-        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
+        current_element = element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
         if len(result) < k:
             result.append(current_element)
         else:
@@ -51,7 +51,7 @@ def _find_k_neighbors_weighted(input, weights, samples, errors, k):
     input = input * weights
     heapq.heapify(result)
     for i in range(0, len(samples)):
-        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
+        current_element = element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0])
         if len(result) < k:
             result.append(current_element)
         else:
@@ -76,7 +76,7 @@ def find_k_neighbors(input, samples, errors, k):
     result = []
     heapq.heapify(result)
     for i in range(0, len(samples)):
-        current_element = Element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0], samples[i], errors[i])
+        current_element = element.Element(_calculate_distance(input, samples[i]) * -1, errors[i][0], samples[i], errors[i])
         if len(result) < k:
             result.append(current_element)
         else:

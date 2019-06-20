@@ -6,7 +6,8 @@ from selenium import webdriver
 from pathlib import Path
 
 
-BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/"
+BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/nations"
+BASE_PATH_RESOURCES = "/Users/francesco/Desktop/Cose da Sistemare/test_p/resources"
 
 
 def colored_print(text, color):
@@ -67,7 +68,7 @@ def download_from_macrotrends(url, download_folder):
         "download.directory_upgrade": True
     }
     options.add_experimental_option('prefs', prefs)
-    driver = webdriver.Chrome(BASE_PATH_NATIONS + "chromedriver", chrome_options=options)
+    driver = webdriver.Chrome(BASE_PATH_RESOURCES + "chromedriver", chrome_options=options)
     driver.get(url)
     ul = driver.find_elements_by_id("myTabs")[0]
     li = ul.find_elements_by_tag_name("li")[1]

@@ -1,7 +1,7 @@
 from __future__ import division
 import sys
 import os
-import Nation
+import nation
 import support
 
 
@@ -11,7 +11,7 @@ if len(sys.argv) == 1 or sys.argv[1] == "help":
 
 nation_code = sys.argv[1]
 
-nation = Nation.load_nation(nation_code)
+nation = nation.load_nation(nation_code)
 files = os.listdir(nation.base_path_datas)
 files.sort()
 for file in files:
