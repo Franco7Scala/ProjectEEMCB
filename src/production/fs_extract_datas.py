@@ -150,10 +150,23 @@ local_folders.append(local_saving_folder + "/carbon.csv")
 if verbose:
     support.colored_print("Aggregating datas...", "green")
 
-to_elaborate = ((datetime.now().year - 2016) * 12) + datetime.now().month
+db = MySQLdb.connect(host=db_dict["host"], user=db_dict["user"], passwd=db_dict["password"], db=db_dict["database"])
+cursor = db.cursor()
+cursor.execute("SELECT MAX(year) FROM production_data")
+
+if cursor.rowcount == 0:
+    start_date = datetime(2016, 1, 1)
+
+else:
+    start_year = cursor.fetchone()[0]
+    cursor.execute("SELECT MAX(day_in_year) FROM production_data WHERE year = " + str(start_year))
+    day_in_year = cursor.fetchone()[0]
+    start_date = datetime(start_year, 1, 1) + timedelta(day_in_year)
+
+to_elaborate =(datetime.now().year - start_date.year) * 12 + datetime.now().month - start_date.month
 elaborated = -1
-for year in range(2016, datetime.now().year + 1):
-    for month in range(1, datetime.now().month):
+for year in range(start_date.year, datetime.now().year + 1):
+    for month in range(start_date.month, datetime.now().month):
         elaborated += 1
         if verbose:
             support.print_progress_bar(elaborated, to_elaborate, prefix='Progress:', suffix='Completed', length=50)
@@ -451,11 +464,6 @@ for year in range(2016, datetime.now().year + 1):
             print value
 
         # saving all days in month to db
-        db = MySQLdb.connect(host=db_dict["host"],
-                             user=db_dict["user"],
-                             passwd=db_dict["password"],
-                             db=db_dict["database"])
-        cursor = db.cursor()
         query = "INSERT INTO production_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         for value in tuples:
             val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
@@ -471,5 +479,4 @@ support.colored_print("Completed!", "pink")
 
 # TODO
 # funzionamento generale
-# non reinserire cose gia messe
 # download su server senza UI (options.AddArguments("headless");)
