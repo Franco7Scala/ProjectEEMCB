@@ -1,3 +1,5 @@
+from pyvirtualdisplay import Display
+
 from selenium import webdriver
 import time
 import os
@@ -17,6 +19,15 @@ def is_download_finished(temp_folder):
 
 
 
+
+
+display = Display(visible=0, size=(800, 600))
+display.start()
+
+
+
+
+
 url = "https://www.macrotrends.net/1369/crude-oil-price-history-chart"
 download_folder = "/Users/francesco/Desktop/Cose da Sistemare/test_p/raw_data"
 
@@ -29,7 +40,7 @@ prefs = {
     "download.directory_upgrade": True
 }
 options.add_experimental_option('prefs', prefs)
-driver = webdriver.Chrome("/Users/francesco/Desktop/Cose da Sistemare/test_p/chromedriver", chrome_options=options)
+driver = webdriver.Chrome("/Users/francesco/Desktop/Cose da Sistemare/test_p/resources/chromedriver", chrome_options=options)
 driver.get(url)
 
 ul = driver.find_elements_by_id("myTabs")[0]
@@ -45,4 +56,7 @@ while not finished:
     time.sleep(1)
     finished = is_download_finished(download_folder)
 
+
+
+display.stop()
 driver.close()

@@ -4,6 +4,7 @@ import sys
 import time
 from selenium import webdriver
 from pathlib import Path
+from pyvirtualdisplay import Display
 
 
 BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/nations"
@@ -61,6 +62,8 @@ def double_contains(value, elements):
 
 
 def download_from_macrotrends(url, download_folder):
+    display = Display(visible=0, size=(800, 600))
+    display.start()
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": download_folder,
@@ -82,6 +85,7 @@ def download_from_macrotrends(url, download_folder):
         time.sleep(1)
         finished = _is_download_finished(download_folder)
 
+    display.stop()
     driver.close()
 
 

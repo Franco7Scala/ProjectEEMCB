@@ -37,7 +37,6 @@ with open(support.BASE_PATH_RESOURCES + "/db.json", "r") as input_file:
 if verbose:
     support.colored_print("Downloading data from Entsoe...", "green")
 
-
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_entsoe"]["user"], password=dict["sftp_entsoe"]["password"], cnopts=cnopts) as sftp:
