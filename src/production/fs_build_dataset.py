@@ -29,13 +29,15 @@ with open(support.BASE_PATH_RESOURCES + "/db.json", "r") as input_file:
 
 db = MySQLdb.connect(host=dict["host"], user=dict["user"], passwd=dict["password"], db=dict["database"])
 
+
+columns_name = ["nation_id", "day_in_year", "holiday", "hour", "production_pv", "production_hydro", "production_biomass", "production_wind", "consumption", "transits", "price_oil", "price_gas", "price_gas", "price_carbon", "production_fossil_coal_gas", "production_fossil_gas", "production_fossil_hard_coal", "production_fossil_oil", "production_nuclear", "production_other", "production_waste", "production_lignite"]
 cursor = db.cursor()
 columns_to_keep = ""
-for column_name in nation.columns_inputs:
-    columns_to_keep += column_name + ", "
+for input_index in nation.columns_inputs:
+    columns_to_keep += columns_name[input_index] + ", "
 
-for column_name in nation.columns_outputs:
-    columns_to_keep += column_name + ", "
+for output_index in nation.columns_outputs:
+    columns_to_keep += columns_name[output_index] + ", "
 
 columns_to_keep = columns_to_keep[:-2]
 cursor.execute("SELECT " + columns_to_keep + " FROM production_data")
@@ -57,65 +59,65 @@ for x in range(0, num_rows):
 
     # saving output
     current_output = []
-    for output_index in range(0, len(nation.indexes_outputs)):
-        current_output.append(len(nation.indexes_inputs) + row[output_index])
+    for output_index in range(0, len(nation.columns_outputs)):
+        current_output.append(len(nation.columns_inputs) + row[output_index])
 
     outputs.append(current_output)
 
     # building RF dataset
     line_rf = ""
-    for input_index in range(0, len(nation.indexes_inputs)):
+    for input_index in range(0, len(nation.columns_inputs)):
         line_rf += str(row[input_index]) + " "
 
     line_rf += "="
-    for output_index in range(0, len(nation.indexes_outputs)):
-        line_rf += " " + str(row[output_index + len(nation.indexes_inputs)])
+    for output_index in range(0, len(nation.columns_outputs)):
+        line_rf += " " + str(row[output_index + len(nation.columns_inputs)])
 
     text_file_rf.write(line_rf + "\n")
 
     # building WP / WPWL dataset
     line_wp = ""
     line_wpwl = ""
-    for input_index in range(0, len(nation.indexes_inputs)):
+    for input_index in range(0, len(nation.columns_inputs)):
         line_wp += str(row[input_index]) + " "
         line_wpwl += str(row[input_index]) + " "
 
-    for output_index in range(0, len(nation.indexes_outputs)):
+    for output_index in range(0, len(nation.columns_outputs)):
         if x < back_time_wp:
-            line_wp += str(row[output_index + len(nation.indexes_inputs)]) + " "
+            line_wp += str(row[output_index + len(nation.columns_inputs)]) + " "
         else:
-            line_wp += str(outputs[x - back_time][output_index]) + " "
+            line_wp += str(outputs[x - back_time_wp][output_index]) + " "
 
         if x < back_time_wpwl:
-            line_wpwl += str(row[output_index + len(nation.indexes_inputs)]) + " "
+            line_wpwl += str(row[output_index + len(nation.columns_inputs)]) + " "
         else:
-            line_wpwl += str(outputs[x - back_time][output_index]) + " "
+            line_wpwl += str(outputs[x - back_time_wpwl][output_index]) + " "
 
     line_wp += "="
     line_wpwl += "="
-    for output_index in range(0, len(nation.indexes_outputs)):
-        line_wp += " " + str(row[output_index + len(nation.indexes_inputs)])
-        line_wpwl += " " + str(row[output_index + len(nation.indexes_inputs)])
+    for output_index in range(0, len(nation.columns_outputs)):
+        line_wp += " " + str(row[output_index + len(nation.columns_inputs)])
+        line_wpwl += " " + str(row[output_index + len(nation.columns_inputs)])
 
     text_file_wp.write(line_wp + "\n")
     text_file_wpwl.write(line_wpwl + "\n")
 
     # building WPAW dataset
     line_wpaw = ""
-    for input_index in range(0, len(nation.indexes_inputs)):
+    for input_index in range(0, len(nation.columns_inputs)):
         line_wpaw += str(row[input_index]) + " "
 
     for amount_days in range(1, 8):
         back_time = back_day * amount_days
-        for output_index in range(0, len(nation.indexes_outputs)):
+        for output_index in range(0, len(nation.columns_outputs)):
             if x < back_time:
-                line_wpaw += str(row[output_index + len(nation.indexes_inputs)]) + " "
+                line_wpaw += str(row[output_index + len(nation.columns_inputs)]) + " "
             else:
                 line_wpaw += str(outputs[x - back_time][output_index]) + " "
 
     line_wpaw += "="
-    for output_index in range(0, len(nation.indexes_outputs)):
-        line_wpaw += " " + str(row[output_index + len(nation.indexes_inputs)])
+    for output_index in range(0, len(nation.columns_outputs)):
+        line_wpaw += " " + str(row[output_index + len(nation.columns_inputs)])
 
     text_file_wpaw.write(line_wpaw + "\n")
 

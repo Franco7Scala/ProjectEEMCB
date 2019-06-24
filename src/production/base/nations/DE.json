@@ -7,8 +7,8 @@
 		"path_training_set_prediction_wp": "/dataset_wp.txt",
 		"path_training_set_prediction_wpwl": "/dataset_wpwl.txt",
 		"path_training_set_prediction_wpaw": "/dataset_wpaw.txt",
-		"columns_inputs": "day_in_year holiday hour production_pv production_hydro production_biomass production_wind consumption transits price_oil price_gas price_carbon",
-		"columns_outputs": "production_lignite production_fossil_coal_gas production_fossil_gas production_fossil_hard_coal production_nuclear production_other production_waste",
+		"columns_inputs": "2 3 4 5 6 7 8 9 10 11 12 13",
+		"columns_outputs": "21 14 15 16 18 19 20",
 		"sources": {
 			"production": [{
 					"id": 0,

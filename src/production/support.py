@@ -7,8 +7,8 @@ from pathlib import Path
 from pyvirtualdisplay import Display
 
 
-BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/nations"
-BASE_PATH_RESOURCES = "/Users/francesco/Desktop/Cose da Sistemare/test_p/resources"
+BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/nations/"
+BASE_PATH_RESOURCES = "/Users/francesco/Desktop/Cose da Sistemare/test_p/resources/"
 
 
 def colored_print(text, color):
@@ -62,8 +62,8 @@ def double_contains(value, elements):
 
 
 def download_from_macrotrends(url, download_folder):
-    display = Display(visible=0, size=(800, 600))
-    display.start()
+    #display = Display(visible=0, size=(800, 600))
+   # display.start()
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": download_folder,
@@ -85,8 +85,61 @@ def download_from_macrotrends(url, download_folder):
         time.sleep(1)
         finished = _is_download_finished(download_folder)
 
-    display.stop()
+    #sdisplay.stop()
     driver.close()
+
+
+def convert_column_to_index(column_name):
+    if column_name == "nation_code":
+        return 0
+    elif column_name == "year":
+        return 1
+    elif column_name == "day_in_year":
+        return 2
+    elif column_name == "holiday":
+        return 3
+    elif column_name == "hour":
+        return 4
+    elif column_name == "production_pv":
+        return 5
+    elif column_name == "production_hydro":
+        return 6
+    elif column_name == "production_biomass":
+        return 7
+    elif column_name == "production_wind":
+        return 8
+    elif column_name == "consumption":
+        return 9
+    elif column_name == "transits":
+        return 10
+    elif column_name == "price_oil":
+        return 11
+    elif column_name == "price_gas":
+        return 12
+    elif column_name == "price_carbon":
+        return 13
+    elif column_name == "production_fossil_coal_gas":
+        return 14
+    elif column_name == "production_fossil_gas":
+        return 15
+    elif column_name == "production_fossil_hard_coal":
+        return 16
+    elif column_name == "production_fossil_oil":
+        return 17
+    elif column_name == "production_nuclear":
+        return 18
+    elif column_name == "production_other":
+        return 19
+    elif column_name == "production_waste":
+        return 20
+    elif column_name == "production_lignite":
+        return 21
+    elif column_name == "production_other_renewable":
+        return 22
+    elif column_name == "production_other_geothermal":
+        return 23
+    else:
+        return -1
 
 
 def _is_download_finished(folder):

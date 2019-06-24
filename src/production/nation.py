@@ -60,7 +60,7 @@ def load_nation(code):
     with open(support.BASE_PATH_NATIONS + "/" + str(code) + ".json", "r") as input_file:
         dict = json.load(input_file)
 
-    result.code = int(dict["nation"]["code"])
+    result.code = dict["nation"]["code"]
     result.name = dict["nation"]["name"]
     result.base_path_datas = dict["nation"]["base_path_datas"]
     result.path_training_set_prediction_rf = dict["nation"]["path_training_set_prediction_rf"]
@@ -69,11 +69,11 @@ def load_nation(code):
     result.path_training_set_prediction_wpaw = dict["nation"]["path_training_set_prediction_wpaw"]
     result.columns_inputs = []
     for _, e in enumerate(dict["nation"]["columns_inputs"].split()):
-        result.columns_inputs.append(e.strip())
+        result.columns_inputs.append(int(e.strip()))
 
     result.columns_outputs = []
     for _, e in enumerate(dict["nation"]["columns_outputs"].split()):
-        result.columns_outputs.append(e.strip())
+        result.columns_outputs.append(int(e.strip()))
 
     for entry in dict["nation"]["sources"]["production"]:
         production = Production(entry["id"])

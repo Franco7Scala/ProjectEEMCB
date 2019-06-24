@@ -11,6 +11,7 @@ import bisect
 import MySQLdb
 import codecs
 from datetime import datetime, timedelta
+from MySQLdb import IntegrityError
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -426,14 +427,14 @@ for year in range(start_date.year, datetime.now().year + 1):
                 else:
                     target_date = target_date - timedelta(days=1)
 
-        for value in tuples:
-            print value
-
         # saving all days in month to db
         query = "INSERT INTO production_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         for value in tuples:
             val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
-            cursor.execute(query, val)
+            try:
+                cursor.execute(query, val)
+            except IntegrityError:
+                pass
 
         db.commit()
 
