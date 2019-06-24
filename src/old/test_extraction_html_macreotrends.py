@@ -21,7 +21,7 @@ def is_download_finished(temp_folder):
 
 
 
-display = Display(visible=0, size=(800, 600))
+display = Display(visible=0, size=(2000, 600))
 display.start()
 
 

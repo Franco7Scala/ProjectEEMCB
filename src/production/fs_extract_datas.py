@@ -442,7 +442,3 @@ if verbose:
     support.print_progress_bar(100, 100, prefix='Progress:', suffix='Completed', length=50)
 
 support.colored_print("Completed!", "pink")
-
-
-# TODO
-# download su server senza UI (options.AddArguments("headless");)

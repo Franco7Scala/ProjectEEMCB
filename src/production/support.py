@@ -3,12 +3,13 @@ import holidays
 import sys
 import time
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from pathlib import Path
 from pyvirtualdisplay import Display
 
 
-BASE_PATH_NATIONS = "/Users/francesco/Desktop/Cose da Sistemare/test_p/nations/"
-BASE_PATH_RESOURCES = "/Users/francesco/Desktop/Cose da Sistemare/test_p/resources/"
+BASE_PATH_NATIONS = "/HERE/nations/"
+BASE_PATH_RESOURCES = "/HERE/resources/"
 
 
 def colored_print(text, color):
@@ -62,8 +63,8 @@ def double_contains(value, elements):
 
 
 def download_from_macrotrends(url, download_folder):
-    #display = Display(visible=0, size=(800, 600))
-   # display.start()
+    display = Display(visible=0, size=(2000, 600))
+    display.start()
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": download_folder,
@@ -85,8 +86,11 @@ def download_from_macrotrends(url, download_folder):
         time.sleep(1)
         finished = _is_download_finished(download_folder)
 
-    #sdisplay.stop()
-    driver.close()
+    display.stop()
+    try:
+        driver.close()
+    except WebDriverException:
+        pass
 
 
 def convert_column_to_index(column_name):
