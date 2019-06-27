@@ -6,7 +6,7 @@ import support
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    support.colored_print("Usage:\n\t-parameter 1: nation code", "red")
+    support.colored_print("Usage:\n\t-parameter 1: nation code (string)", "red")
     sys.exit(0)
 
 nation_code = sys.argv[1]

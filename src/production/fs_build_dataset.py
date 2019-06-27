@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 if len(sys.argv) == 1 or sys.argv[1] == "help":
-    support.colored_print("Usage:\n\t-parameter 1: nation code\n\t-parameter 2: verbose (bool)", "red")
+    support.colored_print("Usage:\n\t-parameter 1: nation code (string)\n\t-parameter 2: verbose (bool)", "red")
     sys.exit(0)
 
 nation_code = sys.argv[1]
