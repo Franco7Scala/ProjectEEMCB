@@ -63,8 +63,8 @@ def double_contains(value, elements):
 
 
 def download_from_macrotrends(url, download_folder):
-    display = Display(visible=0, size=(2000, 600))
-    display.start()
+    #display = Display(visible=0, size=(2000, 600))
+    #display.start()
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": download_folder,
@@ -73,6 +73,8 @@ def download_from_macrotrends(url, download_folder):
     }
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(BASE_PATH_RESOURCES + "chromedriver", chrome_options=options)
+    driver.set_window_size(2000, 600)
+    driver.maximize_window()
     driver.get(url)
     ul = driver.find_elements_by_id("myTabs")[0]
     li = ul.find_elements_by_tag_name("li")[1]
@@ -86,7 +88,7 @@ def download_from_macrotrends(url, download_folder):
         time.sleep(1)
         finished = _is_download_finished(download_folder)
 
-    display.stop()
+    #display.stop()
     try:
         driver.close()
     except WebDriverException:
