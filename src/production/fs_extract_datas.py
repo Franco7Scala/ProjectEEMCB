@@ -22,7 +22,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 if len(sys.argv) == 1 or sys.argv[1] == "help":
     support.colored_print("Usage:\n\t-parameter 1: verbose (bool)", "red")
     sys.exit(0)
-    pass
 
 verbose = bool(sys.argv[1])
 
@@ -55,16 +54,14 @@ with pysftp.Connection(host=dict["sftp_entsoe"]["host"], username=dict["sftp_ent
                 if not os.path.exists(local_folders[i] + line):
                     sftp.get(line, local_folders[i] + line)
 
-# deleting unnecessary files
+# deleting unnecessaries files
 os.remove(local_folders[0] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_ActualTotalLoad.csv")
 os.remove(local_folders[1] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_AggregatedGenerationPerType.csv")
 os.remove(local_folders[2] + str(datetime.now().year) + "_" + str(datetime.now().month) + "_CrossBorderPhysicalFlow.csv")
 
-
 local_folders = [local_saving_folder + "/TP_export/ActualTotalLoad/",
                  local_saving_folder + "/TP_export/AggregatedGenerationPerType/",
                  local_saving_folder + "/TP_export/CrossBorderPhysicalFlow/"]
-
 
 # macrotrends
 if verbose:
@@ -83,7 +80,7 @@ try:
 except os.error:
     pass
 
-support.download_from_macrotrends("https://www.macrotrends.net/1369/crude-oil-price-history-chart", oil_saving_folder)
+support.download_from_macrotrends(dict["oil_prices_source"], oil_saving_folder)
 local_folders.append(oil_saving_file)
 
 # natural gas
@@ -99,7 +96,7 @@ try:
 except os.error:
     pass
 
-support.download_from_macrotrends("https://www.macrotrends.net/2478/natural-gas-prices-historical-chart", gas_saving_folder)
+support.download_from_macrotrends(dict["gas_prices_source"], gas_saving_folder)
 local_folders.append(gas_saving_file)
 
 # quandl
@@ -107,7 +104,7 @@ if verbose:
     support.colored_print("Downloading data from Quandl...", "green")
 
 # carbon
-http_request = requests.get('https://www.quandl.com/api/v3/datasets/CHRIS/ICE_C1.csv?api_key=-q3ecFz_jdpZBNM73ozq')
+http_request = requests.get(dict["carbon_prices_source"])
 
 with open(local_saving_folder + "/carbon.csv", "w") as carbon_file:
     carbon_file.write(http_request.text)

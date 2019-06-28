@@ -18,4 +18,4 @@ def parse_data(path):
             inputs.append(input)
             outputs.append(output)
 
-    return numpy.array(inputs), numpy.array(outputs), len(inputs), len(outputs)
+    return numpy.array(inputs), numpy.array(outputs)

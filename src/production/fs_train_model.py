@@ -27,7 +27,7 @@ verbose = bool(sys.argv[3])
 nation = nation.load_nation(nation_code)
 
 selected_model = nation.sources[source_id].best_model
-training_set_input, training_set_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_prediction)
+training_set_input, training_set_output = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_prediction)
 test_size = 200
 train_size = len(training_set_input) - test_size
 training_set_output = training_set_output[:, source_id]
@@ -55,7 +55,6 @@ model_fit_time = time.time() - t0
 
 # testing
 sum_relative_error = 0
-
 for sample_selected in range(train_size, (train_size + test_size)):
     expected_output = training_set_output[sample_selected]
     output = model.predict(training_set_input[sample_selected].reshape(1, -1))
@@ -103,7 +102,7 @@ file_training_set_error.close()
 if verbose:
     support.colored_print("Calculating quality error estimator...", "green")
 
-set_input_error, set_output_error, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
+set_input_error, set_output_error = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
 test_set_input_error = set_input_error[-test_size:]
 test_set_output_error = set_output_error[-test_size:]
 sum_absolute_error = 0

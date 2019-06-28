@@ -34,7 +34,7 @@ def print_progress_bar (iteration, total, prefix='', suffix='', decimals=1, leng
     bar = fill * filled_length + '-' * (length - filled_length)
     sys.stdout.write('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix))
     if iteration == total:
-        print()
+        print ""
 
 
 def calculate_relative_error(real_output, expected_output):
@@ -63,8 +63,8 @@ def double_contains(value, elements):
 
 
 def download_from_macrotrends(url, download_folder):
-    #display = Display(visible=0, size=(2000, 600))
-    #display.start()
+    display = Display(visible=0, size=(3000, 2000))
+    display.start()
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": download_folder,
@@ -73,7 +73,7 @@ def download_from_macrotrends(url, download_folder):
     }
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(BASE_PATH_RESOURCES + "chromedriver", chrome_options=options)
-    driver.set_window_size(2000, 600)
+    driver.set_window_size(3000, 2000)
     driver.maximize_window()
     driver.get(url)
     ul = driver.find_elements_by_id("myTabs")[0]
@@ -88,7 +88,7 @@ def download_from_macrotrends(url, download_folder):
         time.sleep(1)
         finished = _is_download_finished(download_folder)
 
-    #display.stop()
+    display.stop()
     try:
         driver.close()
     except WebDriverException:

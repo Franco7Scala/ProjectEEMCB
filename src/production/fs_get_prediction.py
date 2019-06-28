@@ -36,7 +36,7 @@ output = model.predict(input)
 if verbose:
     support.colored_print("Estimating error...", "green")
 
-training_set_error_input, training_set_error_output, _, _ = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
+training_set_error_input, training_set_error_output = parser.parse_data(nation.base_path_datas + nation.sources[source_id].path_training_set_error)
 error = knn.get_error_estimation(input[0], training_set_error_input, training_set_error_output, nation.sources[source_id].best_k, nation.sources[source_id].k_weighted)
 if verbose:
     support.colored_print("Showing results...", "green")

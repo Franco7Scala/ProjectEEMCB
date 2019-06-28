@@ -64,11 +64,18 @@ for x in range(0, num_rows):
 
     outputs.append(current_output)
 
-    # building RF dataset
+    # first part of input
     line_rf = ""
+    line_wp = ""
+    line_wpwl = ""
+    line_wpaw = ""
     for input_index in range(0, input_quantity):
         line_rf += str(row[input_index]) + " "
+        line_wp += str(row[input_index]) + " "
+        line_wpwl += str(row[input_index]) + " "
+        line_wpaw += str(row[input_index]) + " "
 
+    # building RF dataset
     line_rf += "="
     for output_index in range(0, output_quantity):
         line_rf += " " + str(row[input_quantity + output_index])
@@ -76,12 +83,6 @@ for x in range(0, num_rows):
     text_file_rf.write(line_rf + "\n")
 
     # building WP / WPWL dataset
-    line_wp = ""
-    line_wpwl = ""
-    for input_index in range(0, input_quantity):
-        line_wp += str(row[input_index]) + " "
-        line_wpwl += str(row[input_index]) + " "
-
     for output_index in range(0, output_quantity):
         if x < back_time_wp:
             line_wp += str(row[input_quantity + output_index]) + " "
@@ -103,10 +104,6 @@ for x in range(0, num_rows):
     text_file_wpwl.write(line_wpwl + "\n")
 
     # building WPAW dataset
-    line_wpaw = ""
-    for input_index in range(0, input_quantity):
-        line_wpaw += str(row[input_index]) + " "
-
     for amount_days in range(1, 8):
         back_time = back_day * amount_days
         for output_index in range(0, output_quantity):

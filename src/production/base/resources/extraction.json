@@ -4,5 +4,8 @@
 		"user": "francesco.scala@unical.it",
 		"password": "scalaPass1"
 },
+	"gas_prices_source": "https://www.macrotrends.net/2478/natural-gas-prices-historical-chart",
+	"oil_prices_source": "https://www.macrotrends.net/1369/crude-oil-price-history-chart",
+	"carbon_prices_source": "https://www.quandl.com/api/v3/datasets/CHRIS/ICE_C1.csv?api_key=-q3ecFz_jdpZBNM73ozq",
 	"nations": ["IT", "DE", "BE", "CH", "FR", "NL"]
 }
