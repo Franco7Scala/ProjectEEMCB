@@ -130,7 +130,15 @@ else:
 to_elaborate =(datetime.now().year - start_date.year) * 12 + datetime.now().month - start_date.month
 elaborated = -1
 for year in range(start_date.year, datetime.now().year + 1):
-    for month in range(start_date.month, datetime.now().month):
+    start_month = 1
+    end_month = 13
+    if year == start_date.year:
+        start_month = start_date.month
+
+    if year == datetime.now().year:
+        end_month = datetime.now().month
+
+    for month in range(start_month, end_month):
         elaborated += 1
         if verbose:
             support.print_progress_bar(elaborated, to_elaborate, prefix='Progress:', suffix='Completed', length=50)
