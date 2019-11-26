@@ -28,7 +28,6 @@ if verbose:
     support.colored_print("Loading model...", "green")
 
 model = joblib.load(path_model)
-
 if verbose:
     support.colored_print("Making prediction...", "green")
 

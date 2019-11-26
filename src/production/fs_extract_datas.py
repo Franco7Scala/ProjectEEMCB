@@ -74,7 +74,7 @@ try:
 except os.error:
     pass
 
-oil_saving_file = oil_saving_folder + "/csv.csv"
+oil_saving_file = oil_saving_folder + "/csv"
 try:
     os.remove(oil_saving_file)
 except os.error:
@@ -90,7 +90,7 @@ try:
 except os.error:
     pass
 
-gas_saving_file = gas_saving_folder + "/csv.csv"
+gas_saving_file = gas_saving_folder + "/csv"
 try:
     os.remove(gas_saving_file)
 except os.error:
@@ -127,7 +127,7 @@ else:
     day_in_year = cursor.fetchone()[0]
     start_date = datetime(start_year, 1, 1) + timedelta(day_in_year)
 
-to_elaborate =(datetime.now().year - start_date.year) * 12 + datetime.now().month - start_date.month
+to_elaborate = (datetime.now().year - start_date.year) * 12 + datetime.now().month - start_date.month
 elaborated = -1
 for year in range(start_date.year, datetime.now().year + 1):
     start_month = 1
@@ -438,8 +438,8 @@ for year in range(start_date.year, datetime.now().year + 1):
             val = (value.nation, value.year, value.day_in_year, value.holiday, value.hour, value.production_pv, value.production_hydro, value.production_biomass, value.production_wind, value.consumption, value.transits, value.price_oil, value.price_gas, value.price_carbon, value.production_fossil_coal_gas, value.production_fossil_gas, value.production_fossil_hard_coal, value.production_fossil_oil, value.production_nuclear, value.production_other, value.production_waste, value.production_lignite, value.production_other_renewable, value.production_geothermal)
             try:
                 cursor.execute(query, val)
-            except IntegrityError:
-                pass
+            except IntegrityError as e:
+                print e
 
         db.commit()
 
@@ -449,18 +449,18 @@ if verbose:
 # freeing space
 if verbose:
     support.colored_print("Freeing space...", "green")
-
+"""
 names = os.listdir(local_saving_folder)
 for i in range(0, len(names)):
     names[i] = local_saving_folder + "/" + names[i]
 
 for name in names:
-    if "." not in name:
+    if os.path.isdir(name):
         new_names = os.listdir(name)
         for i in range(0, len(new_names)):
             names.append(name + "/" + new_names[i])
 
     else:
         open(name, 'w').close()
-
+"""
 support.colored_print("Completed!", "pink")
